@@ -9,7 +9,7 @@ export default css`
     height: 100vh;
   }
   main {
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
     background: #fff;
     border-radius: 12px;

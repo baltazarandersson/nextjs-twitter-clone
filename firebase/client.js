@@ -1,5 +1,12 @@
 import { initializeApp } from "firebase/app"
 import {
+  addDoc,
+  collection,
+  getDocs,
+  getFirestore,
+  Timestamp,
+} from "firebase/firestore"
+import {
   getAuth,
   onAuthStateChanged,
   GithubAuthProvider,
@@ -18,15 +25,17 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig)
 export const auth = getAuth(firebaseApp)
+export const database = getFirestore(firebaseApp)
 
 const mapUserFromFirebaseAuthToUser = (userInfo) => {
-  const { displayName, email, photoURL } = userInfo.user
+  const { displayName, email, photoURL, uid } = userInfo.user
     ? userInfo.user
     : userInfo
   return {
-    username: displayName,
+    userName: displayName,
     email,
     avatar: photoURL,
+    uid,
   }
 }
 
@@ -49,4 +58,36 @@ export const loginWithGithub = async () => {
     .catch((err) => {
       console.error(err)
     })
+}
+
+export const addDevit = async ({ avatar, content, userId, userName }) => {
+  try {
+    return await addDoc(collection(database, "devits"), {
+      avatar,
+      content,
+      userId,
+      userName,
+      createdAt: Timestamp.fromDate(new Date()),
+      likesCount: 0,
+      sharesCount: 0,
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const fetchLatestDevits = async () => {
+  try {
+    const docsQuery = await getDocs(collection(database, "devits"))
+    const data = docsQuery.docs.map((doc) => {
+      const docData = doc.data()
+      const { createdAt } = docData
+      const intl = new Intl.DateTimeFormat("en-US")
+      const normalizedCreatedAt = intl.format(createdAt.seconds * 1000)
+      return { ...docData, id: doc.id, createdAt: normalizedCreatedAt }
+    })
+    return data
+  } catch (error) {
+    console.error(error)
+  }
 }

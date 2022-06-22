@@ -9,6 +9,7 @@ import useUser, { USER_STATES } from "@hooks/useUser"
 
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
+import { Loader } from "@components/Loader"
 
 export default function Home() {
   const user = useUser()
@@ -42,7 +43,7 @@ export default function Home() {
               <GitHubButton onClick={() => handleClick()} />
             </div>
           )}
-          {user === USER_STATES.NOT_KNOWN && <strong>Loading...</strong>}
+          {user === USER_STATES.NOT_KNOWN && <Loader />}
         </div>
       </section>
 

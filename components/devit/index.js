@@ -2,16 +2,29 @@ import Avatar from "@components/Avatar"
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 
-export default function Devit({ avatar, username, message, id }) {
+export default function Devit({
+  id,
+  avatar,
+  userName,
+  userId,
+  likesCount,
+  sharesCount,
+  createdAt,
+  content,
+}) {
   return (
     <>
       <article>
         <div>
-          <Avatar src={avatar} alt={username} />
+          <Avatar src={avatar} alt={userName} />
         </div>
         <section>
-          <strong>{username}</strong>
-          <p>{message}</p>
+          <div className="devit-info">
+            <strong>{userName}</strong>
+            <span className="separator">·</span>
+            <span>{createdAt}</span>
+          </div>
+          <p>{content}</p>
         </section>
       </article>
       <style jsx>{`
@@ -30,6 +43,11 @@ export default function Devit({ avatar, username, message, id }) {
         p {
           line-height: 1.3125;
           margin: 0;
+        }
+
+        .separator {
+          padding: 0px 4px;
+          font-weight: 600;
         }
       `}</style>
     </>

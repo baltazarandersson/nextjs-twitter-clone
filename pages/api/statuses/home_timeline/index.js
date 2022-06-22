@@ -2,7 +2,7 @@ const timeline = [
   {
     id: "0",
     avatar: "https://robohash.org/stefan-one",
-    username: "wongmjane",
+    userName: "wongmjane",
     message: `Twitter Web App now runs ES6+ for modern browsers*, reducing the polyfill bundle size by 83%
   
   (gzipped size went from 16.6 KB down to 2.7 KB!!)
@@ -12,13 +12,13 @@ const timeline = [
   {
     id: "1",
     avatar: "https://robohash.org/stefan-two",
-    username: "midudev",
+    userName: "midudev",
     message: "Wow, devter está funcionando y vivo 🦉",
     name: "Miguel Ángel Durán",
   },
   {
     id: "2",
-    username: "d4nidev",
+    userName: "d4nidev",
     name: "Daniel de la Cruz",
     avatar: "https://robohash.org/stefan-three",
     message: `Abro paraguas Paraguas
@@ -28,7 +28,7 @@ const timeline = [
   {
     id: "0",
     avatar: "https://robohash.org/stefan-one",
-    username: "wongmjane",
+    userName: "wongmjane",
     message: `Twitter Web App now runs ES6+ for modern browsers*, reducing the polyfill bundle size by 83%
   
   (gzipped size went from 16.6 KB down to 2.7 KB!!)
@@ -38,13 +38,13 @@ const timeline = [
   {
     id: "1",
     avatar: "https://robohash.org/stefan-two",
-    username: "midudev",
+    userName: "midudev",
     message: "Wow, devter está funcionando y vivo 🦉",
     name: "Miguel Ángel Durán",
   },
   {
     id: "2",
-    username: "d4nidev",
+    userName: "d4nidev",
     name: "Daniel de la Cruz",
     avatar: "https://robohash.org/stefan-three",
     message: `Abro paraguas Paraguas
@@ -54,7 +54,7 @@ const timeline = [
   {
     id: "0",
     avatar: "https://robohash.org/stefan-one",
-    username: "wongmjane",
+    userName: "wongmjane",
     message: `Twitter Web App now runs ES6+ for modern browsers*, reducing the polyfill bundle size by 83%
   
   (gzipped size went from 16.6 KB down to 2.7 KB!!)
@@ -64,13 +64,13 @@ const timeline = [
   {
     id: "1",
     avatar: "https://robohash.org/stefan-two",
-    username: "midudev",
+    userName: "midudev",
     message: "Wow, devter está funcionando y vivo 🦉",
     name: "Miguel Ángel Durán",
   },
   {
     id: "2",
-    username: "d4nidev",
+    userName: "d4nidev",
     name: "Daniel de la Cruz",
     avatar: "https://robohash.org/stefan-three",
     message: `Abro paraguas Paraguas
