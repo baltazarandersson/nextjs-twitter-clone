@@ -1,5 +1,5 @@
 import Avatar from "@components/Avatar"
-import Devit from "@components/devit"
+import Devit from "@components/Devit"
 import { Loader } from "@components/Loader"
 import { fetchLatestDevits } from "@firebase/client"
 import useUser from "@hooks/useUser"
@@ -17,15 +17,15 @@ export default function HomePage() {
   return (
     <>
       <div className="timeline-container">
-        <header>
-          {user ? (
-            <Avatar alt="user-avatar" src={user.avatar} size={32} />
-          ) : (
-            <Loader size={32} />
-          )}
-          <h2>Inicio</h2>
-        </header>
         <section>
+          <header>
+            {user ? (
+              <Avatar alt="user-avatar" src={user.avatar} size={32} />
+            ) : (
+              <Loader size={32} />
+            )}
+            <h2>Inicio</h2>
+          </header>
           {user ? (
             timeline.map(
               ({
@@ -74,15 +74,18 @@ export default function HomePage() {
           display: flex;
           align-items: center;
           background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(4px);
+          backdrop-filter: blur(6px);
           border-bottom: 1px solid ${colors.dimmedGray};
           position: sticky;
           height: 49px;
           padding: 0 16px;
           width: 100%;
           top: 0;
+          z-index: 1;
         }
         section {
+          position: relative;
+
           flex-grow: 1;
           overflow-y: scroll;
         }

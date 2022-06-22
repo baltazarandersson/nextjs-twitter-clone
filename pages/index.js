@@ -3,7 +3,7 @@ import { loginWithGithub } from "@firebase/client"
 import Head from "next/head"
 import { useRouter } from "next/router"
 
-import GitHubButton from "@components/GitHubButton"
+import GitHubButton from "@components/Buttons/GitHubButton"
 import Logo from "@components/Icons/Logo"
 import useUser, { USER_STATES } from "@hooks/useUser"
 
