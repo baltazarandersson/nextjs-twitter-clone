@@ -1,13 +1,16 @@
 import Avatar from "@components/Avatar"
 import useUser from "@hooks/useUser"
-import { addDevit } from "@firebase/client"
-import { useState } from "react"
+import { addDevit, getFileURL, uploadImage } from "@firebase/client"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { Loader } from "@components/Loader"
-import { colors } from "@styles/theme"
+import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import DefaultButton from "@components/Buttons/DefaultButton"
 import GoBackButton from "@components/Buttons/GoBackButton"
+import Globe from "@components/Icons/Globe"
+import Head from "next/head"
+import Cross from "@components/Icons/Cross"
 
 const COMPOSE_STATES = {
   USER_NOT_KNOWN: 0,
@@ -16,11 +19,44 @@ const COMPOSE_STATES = {
   ERROR: 3,
 }
 
+const DRAG_IMAGES_STATES = {
+  ERROR: -1,
+  NONE: 0,
+  DRAG_OVER: 1,
+  UPLOADING: 2,
+  COMPLETE: 3,
+}
+
 export default function DevitCompose() {
   const [devitContent, setDevitContent] = useState("")
   const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN)
+  const [drag, setDrag] = useState(DRAG_IMAGES_STATES.NONE)
+  const [task, setTask] = useState(null)
+  const [imgURL, setImgURL] = useState(null)
+  const [uploadProgress, setUploadProgress] = useState(0)
+
   const user = useUser()
   const router = useRouter()
+
+  useEffect(() => {
+    if (task) {
+      task.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          setUploadProgress(progress)
+        },
+        (error) => {
+          console.error(error)
+        },
+        () => {
+          getFileURL(task, setImgURL)
+          console.log(imgURL)
+        }
+      )
+    }
+  }, [task])
 
   const isButtonDisabled =
     !devitContent.length || status === COMPOSE_STATES.LOADING
@@ -37,37 +73,64 @@ export default function DevitCompose() {
       content: devitContent,
       userId: user.uid,
       userName: user.userName,
+      img: imgURL,
     }).then(router.push("/home/"))
+  }
+
+  const handleDragEnter = (e) => {
+    e.preventDefault()
+    setDrag(DRAG_IMAGES_STATES.DRAG_OVER)
+    console.log("drag over")
+  }
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    setDrag(DRAG_IMAGES_STATES.NONE)
+  }
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setDrag(DRAG_IMAGES_STATES.NONE)
+    const file = e.dataTransfer.files[0]
+
+    const uploadTask = uploadImage(file)
+    setTask(uploadTask)
   }
 
   return (
     <>
+      <Head>
+        <title>Compose a new Devit / Devtter</title>
+      </Head>
       <section>
         <GoBackButton url="/home" />
         {user && (
-          <form onSubmit={handleSumbit}>
+          <div className="compose">
             <Avatar src={user.avatar} alt={user.userName} />
-            <div className="form-input-container">
-              <textarea
-                placeholder="What's happening?"
-                onChange={handleChange}
-              ></textarea>
+            <form onSubmit={handleSumbit}>
+              <div className="input-container">
+                <textarea
+                  placeholder="What's happening?"
+                  onDragEnter={handleDragEnter}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  onChange={handleChange}
+                  value={devitContent}
+                ></textarea>
+                {imgURL && (
+                  <div className="image-container">
+                    <button
+                      onClick={() => setImgURL(null)}
+                      className="remove-image-button"
+                    >
+                      <Cross width={30} height={30} font-weight="bold" />
+                    </button>
+                    <img src={imgURL} />
+                  </div>
+                )}
+                <div className="upload-progress-bar" />
+              </div>
               <div className="sumbit-devit-container">
                 <div className="sumbit-devit-info">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    style={{ height: 18 }}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+                  <Globe height={16} width={16} />
                   <span>This devit is public</span>
                 </div>
                 <DefaultButton disabled={isButtonDisabled} type="sumbit">
@@ -78,12 +141,12 @@ export default function DevitCompose() {
                   )}
                 </DefaultButton>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         )}
       </section>
       <style jsx>{`
-        form {
+        .compose {
           display: flex;
           align-items: start;
           padding: 16px 0;
@@ -91,7 +154,49 @@ export default function DevitCompose() {
         section {
           padding: 16px;
         }
-        .form-input-container {
+        .input-container {
+          position: relative;
+        }
+        .image-container {
+          width: 100%;
+          position: relative;
+        }
+        .remove-image-button {
+          position: absolute;
+          background: ${addOpacityToColor(colors.black, 0.8)};
+          color: ${colors.dimmedGray};
+          top: 8px;
+          left: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          transition: background 0.2s ease-in-out;
+        }
+        .remove-image-button:hover {
+          background: ${addOpacityToColor(colors.black, 0.6)};
+        }
+        .image-container > img {
+          width: 100%;
+          border-radius: 10px;
+          margin-bottom: 16px;
+        }
+        .upload-progress-bar {
+          transition: width 0.3s ease;
+          position: absolute;
+          bottom: 16px;
+          left: 0;
+          height: 8px;
+          width: ${uploadProgress < 100 ? uploadProgress : 0}%;
+          background-color: ${addOpacityToColor(colors.primary, 0.6)};
+          background-color: ${uploadProgress === 100 &&
+          addOpacityToColor("#008000", 0.6)};
+          border-radius: 9999px;
+        }
+        form {
           flex-grow: 1;
         }
         .sumbit-devit-container {
@@ -106,27 +211,34 @@ export default function DevitCompose() {
           align-items: center;
           padding: 2px 12px;
           border-radius: 9999px;
-          color: ${colors.primary};
+          color: ${addOpacityToColor(colors.primary, 0.9)};
           transition: background 0.2s ease-in-out;
         }
         .sumbit-devit-info:hover {
           background: ${addOpacityToColor(colors.primary, 0.1)};
         }
         .sumbit-devit-info > span {
-          font-size: 14px;
+          font-family: ${fonts.secondary};
+          letter-spacing: 1px;
+          font-size: 16px;
           margin-left: 8px;
-          font-weight: 700;
+          font-weight: 600;
           vertical-align: middle;
           display: inline-block;
         }
         textarea {
-          min-height: 150px;
+          border: ${drag === DRAG_IMAGES_STATES.DRAG_OVER
+            ? `2px dashed ${colors.primary}`
+            : "2px dashed transparent"};
+          border-radius: 10px;
+          min-height: 120px;
           outline: 0;
-          width: 100%;
-          border: none;
-          padding: 12px;
+          width: -webkit-fill-available;
+          margin: 0 12px 12px 12px;
+          padding: 12px 8px;
           font-size: 21px;
           resize: none;
+          transition: border 0.2s ease;
         }
       `}</style>
     </>

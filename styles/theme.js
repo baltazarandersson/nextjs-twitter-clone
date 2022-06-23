@@ -4,6 +4,7 @@ export const breakpoints = {
 
 export const fonts = {
   base: "system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif",
+  secondary: '"Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif',
 }
 
 export const colors = {
@@ -12,4 +13,5 @@ export const colors = {
   black: "#24292F",
   gray: "#536471",
   dimmedGray: "#eff3f4",
+  error: "#ff3333",
 }

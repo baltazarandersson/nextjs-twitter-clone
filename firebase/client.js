@@ -4,6 +4,8 @@ import {
   collection,
   getDocs,
   getFirestore,
+  orderBy,
+  query,
   Timestamp,
 } from "firebase/firestore"
 import {
@@ -12,6 +14,12 @@ import {
   GithubAuthProvider,
   signInWithPopup,
 } from "firebase/auth"
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage"
 
 const firebaseConfig = {
   apiKey: "AIzaSyCVRHfNae985X4lcSf19vz5dQU0GkLkJSY",
@@ -26,6 +34,7 @@ const firebaseConfig = {
 export const firebaseApp = initializeApp(firebaseConfig)
 export const auth = getAuth(firebaseApp)
 export const database = getFirestore(firebaseApp)
+export const storage = getStorage(firebaseApp)
 
 const mapUserFromFirebaseAuthToUser = (userInfo) => {
   const { displayName, email, photoURL, uid } = userInfo.user
@@ -60,7 +69,7 @@ export const loginWithGithub = async () => {
     })
 }
 
-export const addDevit = async ({ avatar, content, userId, userName }) => {
+export const addDevit = async ({ avatar, content, userId, userName, img }) => {
   try {
     return await addDoc(collection(database, "devits"), {
       avatar,
@@ -70,6 +79,7 @@ export const addDevit = async ({ avatar, content, userId, userName }) => {
       createdAt: Timestamp.fromDate(new Date()),
       likesCount: 0,
       sharesCount: 0,
+      img,
     })
   } catch (error) {
     console.error(error)
@@ -78,16 +88,31 @@ export const addDevit = async ({ avatar, content, userId, userName }) => {
 
 export const fetchLatestDevits = async () => {
   try {
-    const docsQuery = await getDocs(collection(database, "devits"))
-    const data = docsQuery.docs.map((doc) => {
+    const docsQuery = query(
+      collection(database, "devits"),
+      orderBy("createdAt", "desc")
+    )
+    const docsData = await getDocs(docsQuery)
+
+    const data = docsData.docs.map((doc) => {
       const docData = doc.data()
       const { createdAt } = docData
-      const intl = new Intl.DateTimeFormat("en-US")
-      const normalizedCreatedAt = intl.format(createdAt.seconds * 1000)
-      return { ...docData, id: doc.id, createdAt: normalizedCreatedAt }
+      return { ...docData, id: doc.id, createdAt: +createdAt.toDate() }
     })
     return data
   } catch (error) {
     console.error(error)
   }
+}
+
+export const uploadImage = (file) => {
+  const imagesRef = ref(storage, `images/${file.name}`)
+  const uploadTask = uploadBytesResumable(imagesRef, file)
+  return uploadTask
+}
+
+export const getFileURL = (uploadTask, settter) => {
+  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    settter(downloadURL)
+  })
 }

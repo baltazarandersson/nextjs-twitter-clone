@@ -5,6 +5,7 @@ export default function DefaultButton({
   children,
   disabled,
   type = "button",
+  styles,
 }) {
   return (
     <>
@@ -25,13 +26,17 @@ export default function DefaultButton({
           transition: opacity 0.3s ease;
           background-color: ${colors.black};
           user-select: none;
+          ${styles};
         }
         button:hover {
-          opacity: 0.8;
+          opacity: 0.85;
         }
         button[disabled] {
           cursor: auto;
           opacity: 0.4;
+        }
+        button > :global(svg) {
+          margin-right: 8px;
         }
       `}</style>
     </>

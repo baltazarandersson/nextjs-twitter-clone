@@ -9,10 +9,11 @@ export default css`
     height: 100vh;
   }
   main {
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
     position: relative;
     background: #fff;
-    border-radius: 12px;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
     width: 100%;
     height: 100%;
@@ -20,6 +21,7 @@ export default css`
 
   @media (min-width: ${breakpoints.mobile}) {
     main {
+      border-radius: 12px;
       height: 90vh;
       width: ${breakpoints.mobile};
     }
