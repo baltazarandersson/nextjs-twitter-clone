@@ -1,9 +1,10 @@
-import { initializeApp } from "firebase/app"
+import { getApps, initializeApp } from "firebase/app"
 import {
   addDoc,
   collection,
   getDocs,
   getFirestore,
+  onSnapshot,
   orderBy,
   query,
   Timestamp,
@@ -31,7 +32,12 @@ const firebaseConfig = {
   measurementId: "G-0MGML3H4R5",
 }
 
-export const firebaseApp = initializeApp(firebaseConfig)
+export let firebaseApp
+
+if (!getApps().length) {
+  firebaseApp = initializeApp(firebaseConfig)
+}
+
 export const auth = getAuth(firebaseApp)
 export const database = getFirestore(firebaseApp)
 export const storage = getStorage(firebaseApp)
@@ -86,20 +92,34 @@ export const addDevit = async ({ avatar, content, userId, userName, img }) => {
   }
 }
 
+const mapDevtisFromFirebaseToDevitObject = (devitDoc) => {
+  const devitData = devitDoc.data()
+  const { createdAt } = devitData
+  return { ...devitData, id: devitDoc.id, createdAt: +createdAt.toDate() }
+}
+
+export const listenLatestDevits = (callback) => {
+  const devitsQuery = query(
+    collection(database, "devits"),
+    orderBy("createdAt", "desc")
+  )
+  const unsub = onSnapshot(devitsQuery, (snapshot) => {
+    const data = snapshot.docs.map(mapDevtisFromFirebaseToDevitObject)
+    callback(data)
+  })
+  return unsub
+}
+
 export const fetchLatestDevits = async () => {
   try {
     const docsQuery = query(
       collection(database, "devits"),
       orderBy("createdAt", "desc")
     )
-    const docsData = await getDocs(docsQuery)
 
-    const data = docsData.docs.map((doc) => {
-      const docData = doc.data()
-      const { createdAt } = docData
-      return { ...docData, id: doc.id, createdAt: +createdAt.toDate() }
+    return getDocs(docsQuery).then((devitsCollection) => {
+      return devitsCollection.docs.map(mapDevtisFromFirebaseToDevitObject)
     })
-    return data
   } catch (error) {
     console.error(error)
   }

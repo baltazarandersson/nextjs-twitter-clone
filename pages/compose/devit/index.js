@@ -6,11 +6,12 @@ import { useRouter } from "next/router"
 import { Loader } from "@components/Loader"
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import DefaultButton from "@components/Buttons/DefaultButton"
-import GoBackButton from "@components/Buttons/GoBackButton"
+import SumbitButton from "@components/Buttons/SumbitButton"
 import Globe from "@components/Icons/Globe"
 import Head from "next/head"
 import Cross from "@components/Icons/Cross"
+import LinkButton from "@components/Buttons/LinkButton"
+import ArrowLeft from "@components/Icons/ArrowLeft"
 
 const COMPOSE_STATES = {
   USER_NOT_KNOWN: 0,
@@ -52,7 +53,6 @@ export default function DevitCompose() {
         },
         () => {
           getFileURL(task, setImgURL)
-          console.log(imgURL)
         }
       )
     }
@@ -80,7 +80,6 @@ export default function DevitCompose() {
   const handleDragEnter = (e) => {
     e.preventDefault()
     setDrag(DRAG_IMAGES_STATES.DRAG_OVER)
-    console.log("drag over")
   }
   const handleDragLeave = (e) => {
     e.preventDefault()
@@ -101,7 +100,15 @@ export default function DevitCompose() {
         <title>Compose a new Devit / Devtter</title>
       </Head>
       <section>
-        <GoBackButton url="/home" />
+        <LinkButton
+          href="/home"
+          title="Back"
+          color={colors.black}
+          hoverColor={addOpacityToColor(colors.gray, 0.15)}
+          size={34}
+        >
+          <ArrowLeft width={20} height={20} fill={colors.black} />
+        </LinkButton>
         {user && (
           <div className="compose">
             <Avatar src={user.avatar} alt={user.userName} />
@@ -133,13 +140,13 @@ export default function DevitCompose() {
                   <Globe height={16} width={16} />
                   <span>This devit is public</span>
                 </div>
-                <DefaultButton disabled={isButtonDisabled} type="sumbit">
+                <SumbitButton disabled={isButtonDisabled} type="sumbit">
                   {status === 1 ? (
                     <Loader color={colors.dimmedGray} size={23} border={3} />
                   ) : (
                     "Devit"
                   )}
-                </DefaultButton>
+                </SumbitButton>
               </div>
             </form>
           </div>

@@ -5,7 +5,6 @@ const User = (props) => (
     <g
       fill="none"
       fillRule="evenodd"
-      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       transform="translate(2 2)"

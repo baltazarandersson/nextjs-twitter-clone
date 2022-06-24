@@ -6,7 +6,7 @@ import { useRouter } from "next/router"
 import Logo from "@components/Icons/Logo"
 import useUser, { USER_STATES } from "@hooks/useUser"
 import { Loader } from "@components/Loader"
-import DefaultButton from "@components/Buttons/DefaultButton"
+import SumbitButton from "@components/Buttons/SumbitButton"
 import GitHub from "@components/Icons/GitHub"
 
 import { colors, fonts } from "@styles/theme"
@@ -39,13 +39,13 @@ export default function HomePage() {
         <div className="auth-status-container">
           {user === USER_STATES.NOT_LOGGED && (
             <div>
-              <DefaultButton
+              <SumbitButton
                 onClick={() => handleClick()}
                 styles={`font-weight: 500;  font-family: ${fonts.base};`}
               >
                 <GitHub width={16} heigth={16} />
                 Sign in with GitHub
-              </DefaultButton>
+              </SumbitButton>
             </div>
           )}
           {user === USER_STATES.NOT_KNOWN && <Loader />}

@@ -45,7 +45,7 @@ export default css.global`
   }
 
   *::-webkit-scrollbar-thumb {
-    background-color: ${colors.primary};
+    background-color: ${addOpacityToColor(colors.primary, 0.8)};
     border-radius: 10px;
     border: 3px solid #fff;
   }

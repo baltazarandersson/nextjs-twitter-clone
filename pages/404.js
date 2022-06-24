@@ -1,4 +1,4 @@
-import DefaultButton from "@components/Buttons/DefaultButton"
+import DefaultButton from "@components/Buttons/SumbitButton"
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import Head from "next/head"

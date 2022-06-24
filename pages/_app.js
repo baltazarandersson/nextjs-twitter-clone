@@ -1,10 +1,10 @@
-import AppLayout from "@components/Layout/index"
+import MainLayout from "@components/Layout/index"
 
 function MyApp({ Component, pageProps }) {
   return (
-    <AppLayout>
+    <MainLayout>
       <Component {...pageProps} />
-    </AppLayout>
+    </MainLayout>
   )
 }
 

@@ -2,7 +2,7 @@ import * as React from "react"
 
 export default function Create(props) {
   return (
-    <svg height={21} viewBox="0 0 21 21" width={21} {...props}>
+    <svg height={21} width={21} viewBox="0 0 21 21" {...props}>
       <g
         fill="none"
         fillRule="evenodd"

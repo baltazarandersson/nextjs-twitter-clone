@@ -1,7 +1,7 @@
 import styles from "./styles"
 import globalStyles from "@styles/globals"
 
-export default function AppLayout({ children }) {
+export default function MainLayout({ children }) {
   return (
     <>
       <div>

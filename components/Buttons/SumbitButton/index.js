@@ -1,6 +1,6 @@
 import { colors } from "@styles/theme"
 
-export default function DefaultButton({
+export default function SumbitButton({
   onClick,
   children,
   disabled,

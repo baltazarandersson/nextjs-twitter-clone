@@ -1,4 +1,4 @@
-export default function Avatar({ alt, src, text, size = 49 }) {
+export default function Avatar({ alt, src, text, size = 48 }) {
   return (
     <>
       <div>
@@ -11,7 +11,7 @@ export default function Avatar({ alt, src, text, size = 49 }) {
           align-items: center;
         }
         img {
-          border-radius: 9999px;
+          border-radius: 50%;
           height: ${size}px;
           width: ${size}px;
         }
