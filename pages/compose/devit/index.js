@@ -12,6 +12,7 @@ import Head from "next/head"
 import Cross from "@components/Icons/Cross"
 import LinkButton from "@components/Buttons/LinkButton"
 import ArrowLeft from "@components/Icons/ArrowLeft"
+import { withAuth } from "@components/helpers/withAuth"
 
 const COMPOSE_STATES = {
   USER_NOT_KNOWN: 0,
@@ -28,7 +29,7 @@ const DRAG_IMAGES_STATES = {
   COMPLETE: 3,
 }
 
-export default function DevitCompose() {
+const ComposeDevit = () => {
   const [devitContent, setDevitContent] = useState("")
   const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN)
   const [drag, setDrag] = useState(DRAG_IMAGES_STATES.NONE)
@@ -107,7 +108,7 @@ export default function DevitCompose() {
           hoverColor={addOpacityToColor(colors.gray, 0.15)}
           size={34}
         >
-          <ArrowLeft width={20} height={20} fill={colors.black} />
+          <ArrowLeft width={20} height={20} color={colors.black} />
         </LinkButton>
         {user && (
           <div className="compose">
@@ -251,3 +252,5 @@ export default function DevitCompose() {
     </>
   )
 }
+
+export default withAuth(ComposeDevit)

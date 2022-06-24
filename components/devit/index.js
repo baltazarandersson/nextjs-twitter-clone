@@ -1,4 +1,5 @@
 import Avatar from "@components/Avatar"
+import InteractButton from "@components/Buttons/InteractButton"
 import Comment from "@components/Icons/Comment"
 import Like from "@components/Icons/Like"
 import Revit from "@components/Icons/Revit"
@@ -37,58 +38,91 @@ export default function Devit({
         <div className="avatar-container">
           <Avatar src={avatar} alt={userName} />
         </div>
-        <div className="devit-content-container">
-          <div className="devit-info">
-            <div className="user-name">{userName}</div>
+        <div className="devit-container">
+          <div className="devit-info-container">
+            <span className="user-name">{userName}</span>
             <TextSeparator />
-            <div className="timestamp-container">
-              <Link href={`/status/${id}`}>
-                <a>
-                  <time title={createdAtFormated}>{timeAgo}</time>
-                </a>
-              </Link>
-            </div>
+            <Link href={`/status/${id}`}>
+              <a className="timestamp-container">
+                <time className="timestamp" title={createdAtFormated}>
+                  {timeAgo}
+                </time>
+              </a>
+            </Link>
           </div>
-          <p>{content}</p>
-          {img && <img src={img} />}
-          <section className="interactions-container">
-            <Comment />
-            <Revit />
-            <Like />
-            <Share />
-          </section>
+          <div className="debit-content">
+            <p>{content}</p>
+            {img && <img src={img} />}
+            <section className="interactions-container">
+              <InteractButton
+                size={18}
+                hoverColor={colors.primary}
+                hoverBgColor={addOpacityToColor(colors.primary, 0.1)}
+                title="Comment"
+              >
+                <Comment width={18} height={18} color={colors.gray} />
+              </InteractButton>
+              <InteractButton
+                size={18}
+                hoverColor={colors.green}
+                hoverBgColor={addOpacityToColor(colors.green, 0.1)}
+                title="Revit"
+              >
+                <Revit width={18} height={18} color={colors.gray} />
+              </InteractButton>
+              <InteractButton
+                size={18}
+                hoverColor={colors.red}
+                hoverBgColor={addOpacityToColor(colors.red, 0.1)}
+                title="Like"
+              >
+                <Like width={18} height={18} color={colors.gray} />
+              </InteractButton>
+              <InteractButton
+                size={18}
+                hoverColor={colors.secondary}
+                hoverBgColor={addOpacityToColor(colors.secondary, 0.1)}
+                title="Share"
+              >
+                <Share width={18} height={18} color={colors.gray} />
+              </InteractButton>
+            </section>
+          </div>
         </div>
       </article>
       <style jsx>{`
-        .devit-info {
-          width: auto;
-          display: flex;
-          white-space: nowrap;
-        }
-        .timestamp-container {
-          display: flex;
-          gap: 4px;
-        }
         article {
           cursor: pointer;
           display: flex;
+          align-items: stretch;
           padding: 10px 15px;
           border-bottom: 1px solid ${colors.dimmedGray};
           transition: background 0.2s ease-in-out;
-        }
-        .devit-content-container {
-          overflow-x: hidden;
-          flex-grow: 1;
-        }
-        article:hover {
-          background: ${addOpacityToColor(colors.dimmedGray, 0.8)};
+          overflow: hidden;
         }
         .avatar-container {
           padding-right: 10px;
         }
-        p {
-          line-height: 1.3125;
-          margin: 0;
+        .devit-container {
+          display: flex;
+          flex-direction: column;
+          min-width: 0;
+          flex: 1 1 auto;
+        }
+        .devit-info-container {
+          display: flex;
+        }
+        .timestamp-container {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .timestamp {
+          color: ${colors.gray};
+        }
+        .debit-content {
+          display: flex;
+          flex-direction: column;
         }
         .interactions-container {
           margin-top: 12px;
@@ -100,8 +134,9 @@ export default function Devit({
         }
         .user-name {
           font-weight: 600;
-          overflow: hidden;
           text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
         img {
           margin-top: 12px;
@@ -109,11 +144,11 @@ export default function Devit({
           border-radius: 10px;
           margin-bottom: 16px;
         }
-        time {
-          color: ${colors.gray};
-        }
-        time:hover {
+        .timestamp:hover {
           text-decoration: underline;
+        }
+        article:hover {
+          background: ${addOpacityToColor(colors.dimmedGray, 0.8)};
         }
       `}</style>
     </>

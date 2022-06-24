@@ -1,9 +1,28 @@
 import * as React from "react"
 
-const ArrowLeft = (props) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" width="20" {...props}>
-    <path d="M20 11H7.414l4.293-4.293a1 1 0 0 0-1.414-1.414l-6 6a1 1 0 0 0 0 1.414l6 6a.996.996 0 0 0 1.414 0 1 1 0 0 0 0-1.414L7.414 13H20a1 1 0 1 0 0-2z" />
-  </svg>
-)
+function ArrowLeft(props) {
+  return (
+    <svg
+      height={21}
+      viewBox="0 0 21 21"
+      width={21}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <g
+        fill="none"
+        fillRule="evenodd"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path
+          d="M4.499.497L.5 4.499l4 4.001M13.5 4.5H.5"
+          transform="translate(3 6)"
+        />
+      </g>
+    </svg>
+  )
+}
 
 export default ArrowLeft

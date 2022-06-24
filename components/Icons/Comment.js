@@ -1,17 +1,23 @@
 import * as React from "react"
 
-const Comment = (props) => (
-  <svg height={21} width={21} viewBox="0 0 21 21" {...props}>
-    <g
-      fill="none"
-      fillRule="evenodd"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+function Comment(props) {
+  return (
+    <svg
+      height={21}
+      viewBox="0 0 21 21"
+      width={21}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
-      <path d="M13.418 4.214A9.283 9.283 0 0 0 10.5 3.75c-4.418 0-8 3.026-8 6.759 0 1.457.546 2.807 1.475 3.91L3 19l3.916-2.447a9.181 9.181 0 0 0 3.584.714c4.418 0 8-3.026 8-6.758 0-.685-.12-1.346-.345-1.969M16.5 3.5v4M18.5 5.5h-4" />
-    </g>
-  </svg>
-)
+      <path
+        d="M11 16.517c4.418 0 8-3.284 8-7.017C19 5.767 15.418 3 11 3S3 6.026 3 9.759c0 1.457.546 2.807 1.475 3.91L3.5 18.25l3.916-2.447a9.181 9.181 0 003.584.714z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
 
 export default Comment

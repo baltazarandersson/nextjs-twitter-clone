@@ -14,4 +14,6 @@ export const colors = {
   gray: "#536471",
   dimmedGray: "#eff3f4",
   error: "#ff3333",
+  red: "#f91880",
+  green: "#00ba7c",
 }

@@ -1,10 +1,12 @@
 import Avatar from "@components/Avatar"
-import GoBackButton from "@components/Buttons/GoBackButton"
+import LinkButton from "@components/Buttons/LinkButton"
+import ArrowLeft from "@components/Icons/ArrowLeft"
 import AppLayout from "@components/Layout/AppLayout"
 import Header from "@components/Layout/AppLayout/Header"
 import TextSeparator from "@components/TextSeparator"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import { colors } from "@styles/theme"
+import { addOpacityToColor } from "@styles/utils"
 import Head from "next/head"
 import Link from "next/link"
 
@@ -41,7 +43,7 @@ export default function DevitPage({
   img,
   userTag,
 }) {
-  const createdAtFormated = useDateTimeFormat(createdAt, navigator.language, {
+  const createdAtFormated = useDateTimeFormat(createdAt, "en-EN", {
     hour: "numeric",
     minute: "numeric",
     month: "long",
@@ -57,7 +59,15 @@ export default function DevitPage({
         </Head>
         <Header>
           <div className="back-to-home-button">
-            <GoBackButton url="/home" />
+            <LinkButton
+              href="/home"
+              title="Back"
+              color={colors.black}
+              hoverColor={addOpacityToColor(colors.gray, 0.15)}
+              size={34}
+            >
+              <ArrowLeft width={20} height={20} color={colors.black} />
+            </LinkButton>
           </div>
           <h1>Devit</h1>
         </Header>
@@ -80,7 +90,7 @@ export default function DevitPage({
               </a>
             </Link>
             <TextSeparator />
-            <div>Devtter App</div>
+            <span>Devtter Web App</span>
           </div>
         </article>
       </AppLayout>
@@ -102,7 +112,7 @@ export default function DevitPage({
           width: auto;
           display: flex;
           flex-direction: column;
-          white-space: nowrap;
+          overflow: hidden;
         }
         .devit-content-container {
           display: flex;
@@ -114,6 +124,14 @@ export default function DevitPage({
           display: flex;
           gap: 4px;
         }
+        .devit-info-container > span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        time {
+          white-space: nowrap;
+        }
         time:hover {
           text-decoration: underline;
         }
@@ -124,12 +142,8 @@ export default function DevitPage({
           border-bottom: 1px solid ${colors.dimmedGray};
           transition: background 0.2s ease-in-out;
         }
-        div {
-          padding-right: 10px;
-        }
         p {
           font-size: 23px;
-          line-height: 1.3125;
           margin: 0;
           margin-top: 12px;
         }
@@ -137,16 +151,24 @@ export default function DevitPage({
           font-weight: 600;
           overflow: hidden;
           text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .user-tag {
+          color: ${colors.gray};
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         img {
           margin-top: 12px;
           width: 100%;
           border-radius: 10px;
         }
-        time {
-          color: ${colors.gray};
+        a {
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
-        .user-tag {
+        time {
           color: ${colors.gray};
         }
       `}</style>

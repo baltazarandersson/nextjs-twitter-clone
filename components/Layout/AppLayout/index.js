@@ -11,22 +11,21 @@ export default function AppLayout({ children }) {
       <section>{children}</section>
       <nav>
         <LinkButton href="/home" title="Home" size={42} padding={6}>
-          <Home width={26} height={26} stroke={colors.primary} />
+          <Home width={26} height={26} color={colors.primary} />
         </LinkButton>
         <LinkButton href="/search" title="Search" size={42} padding={6}>
-          <Search width={26} height={26} stroke={colors.primary} />
+          <Search width={26} height={26} color={colors.primary} />
         </LinkButton>
         <LinkButton href="/compose/devit" title="Devit" size={42} padding={6}>
-          <Create width={26} height={26} stroke={colors.primary} />
+          <Create width={26} height={26} color={colors.primary} />
         </LinkButton>
         <LinkButton href="/" title="profile" size={42} padding={6}>
-          <User width={26} height={26} stroke={colors.primary} />
+          <User width={26} height={26} color={colors.primary} />
         </LinkButton>
       </nav>
       <style jsx>{`
         section {
-          flex: 1;
-          flex-grow: 1;
+          flex: 1 1 auto;
         }
         nav {
           position: sticky;
