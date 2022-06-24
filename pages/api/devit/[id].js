@@ -6,9 +6,17 @@ export default (req, res) => {
 
   firestore
     .collection("devits")
+    .listDocuments()
+    .then((list) => {
+      console.log(list)
+    })
+
+  firestore
+    .collection("devits")
     .doc(id)
     .get()
     .then((doc) => {
+      console.log(doc.data())
       const data = doc.data()
       const id = doc.id
       const { createdAt } = data

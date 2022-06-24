@@ -14,6 +14,7 @@ import {
   onAuthStateChanged,
   GithubAuthProvider,
   signInWithPopup,
+  getAdditionalUserInfo,
 } from "firebase/auth"
 import {
   getDownloadURL,
@@ -69,7 +70,12 @@ export const onAuthChange = (onChange) => {
 export const loginWithGithub = async () => {
   const gitProvider = new GithubAuthProvider()
   return await signInWithPopup(auth, gitProvider)
-    .then(mapUserFromFirebaseAuthToUser)
+    .then((user) => {
+      const newinfo = getAdditionalUserInfo(user)
+      console.log(newinfo)
+      const data = mapUserFromFirebaseAuthToUser(user)
+      return data
+    })
     .catch((err) => {
       console.error(err)
     })
