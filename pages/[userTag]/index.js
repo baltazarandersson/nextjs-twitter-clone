@@ -11,6 +11,10 @@ import { useEffect, useState } from "react"
 import { fetchLatestUserDevits } from "@firebase/client"
 import Devit from "@components/Devit"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
+import LinkButton from "@components/Buttons/LinkButton"
+import ArrowLeft from "@components/Icons/ArrowLeft"
+import { addOpacityToColor } from "@styles/utils"
+import { Loader } from "@components/Loader"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -58,11 +62,27 @@ export default function User({
         <title>{`${displayName} (@${userName}) / Devtter`}</title>
       </Head>
       <AppLayout>
-        <Header></Header>
-        <section>
+        <Header>
+          <div className="back-to-home-button">
+            <LinkButton
+              href="/home"
+              title="Back"
+              color={colors.black}
+              hoverColor={addOpacityToColor(colors.gray, 0.15)}
+              size={34}
+            >
+              <ArrowLeft width={20} height={20} color={colors.black} />
+            </LinkButton>
+          </div>
+          <div className="header-info-container">
+            <span className="header-user-name">{displayName}</span>
+            <span className="header-devits">{devits.length} devits</span>
+          </div>
+        </Header>
+        <section className="main">
           <div className="cover-container"></div>
           <section className="user-container">
-            <div className="header-info">
+            <div className="account-header-info">
               <div className="picture-container">
                 <img className="picture" src={avatar} />
               </div>
@@ -94,48 +114,70 @@ export default function User({
               </div>
             </div>
           </section>
-          <section>
-            {userTimeLine?.map(
-              ({
-                id,
-                avatar,
-                displayName,
-                userUid,
-                likes,
-                shares,
-                comments,
-                createdAt,
-                content,
-                img,
-              }) => {
-                return (
-                  <Devit
-                    key={id}
-                    displayName={displayName}
-                    avatar={avatar}
-                    content={content}
-                    id={id}
-                    userId={userUid}
-                    likes={likes}
-                    shares={shares}
-                    comments={comments}
-                    createdAt={createdAt}
-                    img={img}
-                  />
-                )
-              }
+          <section className="timeline-container">
+            {userTimeLine !== undefined ? (
+              userTimeLine?.map(
+                ({
+                  id,
+                  avatar,
+                  displayName,
+                  userUid,
+                  likes,
+                  shares,
+                  comments,
+                  createdAt,
+                  content,
+                  img,
+                }) => {
+                  return (
+                    <Devit
+                      key={id}
+                      displayName={displayName}
+                      avatar={avatar}
+                      content={content}
+                      id={id}
+                      userId={userUid}
+                      likes={likes}
+                      shares={shares}
+                      comments={comments}
+                      createdAt={createdAt}
+                      img={img}
+                    />
+                  )
+                }
+              )
+            ) : (
+              <div className="loader-container">
+                <Loader size={32} />
+              </div>
             )}
           </section>
         </section>
       </AppLayout>
       <style jsx>{`
-        section {
+        .main {
           position: relative;
           width: 100%;
+          height: 100%;
           display: flex;
           flex-direction: column;
           align-items: stretch;
           border-bottom: 1px solid ${colors.dimmedGray};
+        }
+        .back-to-home-button {
+          min-width: 56px;
+        }
+        .header-info-container {
+          display: flex;
+          flex-direction: column;
+        }
+        .header-user-name {
+          font-size: 18px;
+          font-weight: 700;
+        }
+        .header-devits {
+          font-size: 13px;
+          color: ${colors.gray};
         }
         .cover-container {
           background-color: ${colors.primary};
@@ -149,7 +191,7 @@ export default function User({
           flex-direction: column;
           align-items: stretch;
         }
-        .header-info {
+        .account-header-info {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -179,11 +221,11 @@ export default function User({
           font-size: ;
         }
         .display-name {
-          font-size: 20px;
+          font-size: 18px;
           font-weight: 700;
         }
         .tag-name {
-          font-size: 15px;
+          font-size: 14px;
           color: ${colors.gray};
           font-weight: 400;
         }
@@ -221,6 +263,17 @@ export default function User({
         }
         .social-stat-name {
           color: ${colors.gray};
+        }
+        .timeline-container {
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
+        }
+        .loader-container {
+          flex: 1 1 auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         @media (min-width: 300px) {
           .picture-container {
