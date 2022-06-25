@@ -11,7 +11,7 @@ import Head from "next/head"
 import Link from "next/link"
 
 export async function getServerSideProps(context) {
-  const { query, res } = context
+  const { query } = context
   const { id } = query
 
   const apiResponse = await fetch(`http://localhost:3000/api/devit/${id}`)
@@ -20,8 +20,7 @@ export async function getServerSideProps(context) {
     let userTag = props.userName.toLowerCase()
     userTag = userTag.replace(/\s+/g, "")
     return { props: { ...props, userTag } }
-  }
-  if (res) {
+  } else {
     return {
       redirect: {
         destination: "/home",
@@ -53,10 +52,10 @@ export default function DevitPage({
 
   return (
     <>
-      <AppLayout header="hola">
-        <Head>
-          <title>{userName + ' on Devtter: "' + content + '"'}</title>
-        </Head>
+      <Head>
+        <title>{userName + ' on Devtter: "' + content + '"'}</title>
+      </Head>
+      <AppLayout>
         <Header>
           <div className="back-to-home-button">
             <LinkButton

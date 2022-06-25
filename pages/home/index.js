@@ -12,11 +12,11 @@ import Header from "@components/Layout/AppLayout/Header"
 import { withAuth } from "@components/helpers/withAuth"
 
 const HomePage = ({ user }) => {
-  const [timeline, setTimeline] = useState([])
+  const [timeline, setTimeline] = useState(undefined)
 
   useEffect(() => {
     const unsub = listenLatestDevits((newDevits) => {
-      setTimeline(newDevits)
+      setTimeline(newDevits || [])
     })
     return () => unsub()
   }, [user])
@@ -33,9 +33,8 @@ const HomePage = ({ user }) => {
           </div>
           <h1>Home</h1>
         </Header>
-
         <section>
-          {timeline.length ? (
+          {timeline !== undefined ? (
             timeline.map(
               ({
                 id,
@@ -83,16 +82,16 @@ const HomePage = ({ user }) => {
           position: relative;
           width: 100%;
           height: 100%;
+          display: flex;
+          flex-direction: column;
         }
         .loader-container {
-          flex: 1 1 auto;
           width: 100%;
           height: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
         }
-
         @media (min-width: ${breakpoints.mobile}) {
           .avatar-container {
             display: none;

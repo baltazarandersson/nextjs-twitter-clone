@@ -1,6 +1,6 @@
 import { colors } from "@styles/theme"
 
-export default function SumbitButton({
+export default function ActionButton({
   onClick,
   children,
   disabled,
@@ -21,7 +21,7 @@ export default function SumbitButton({
           cursor: pointer;
           display: flex;
           font-size: 14px;
-          font-weight: 800;
+          font-weight: 700;
           padding: 8px 24px;
           transition: opacity 0.3s ease;
           background-color: ${colors.black};

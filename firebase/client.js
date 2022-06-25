@@ -2,11 +2,14 @@ import { getApps, initializeApp } from "firebase/app"
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   getFirestore,
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   Timestamp,
 } from "firebase/firestore"
 import {
@@ -56,10 +59,10 @@ const mapUserFromFirebaseAuthToUser = (userInfo) => {
 }
 
 export const onAuthChange = (onChange) => {
-  const unsuscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const normalizedUser = mapUserFromFirebaseAuthToUser(user)
-      onChange(normalizedUser)
+  const unsuscribe = onAuthStateChanged(auth, (userCredentials) => {
+    if (userCredentials) {
+      const user = mapUserFromFirebaseAuthToUser(userCredentials)
+      onChange(user)
     } else {
       onChange(null)
     }
@@ -67,12 +70,42 @@ export const onAuthChange = (onChange) => {
   return unsuscribe
 }
 
+export const createNewUser = async (firebaseUser) => {
+  const { profile } = getAdditionalUserInfo(firebaseUser)
+  const { user } = firebaseUser
+  console.log(user)
+  const { uid, photoURL } = user
+
+  const { login: userName, email, name: displayName, location } = profile
+  const newUser = {
+    userName,
+    uid,
+    email,
+    photoURL,
+    displayName,
+    location,
+    followers: [],
+    following: [],
+    likes: [],
+  }
+  return await setDoc(doc(database, "users", `${uid}`), newUser)
+}
+
+export const getUserInfoByUid = (uid) => {
+  return getDoc(doc(database, "users", `${uid}`)).then((user) => {
+    const userData = user.data()
+    return userData
+  })
+}
+
 export const loginWithGithub = async () => {
   const gitProvider = new GithubAuthProvider()
   return await signInWithPopup(auth, gitProvider)
     .then((user) => {
-      const newinfo = getAdditionalUserInfo(user)
-      console.log(newinfo)
+      const userInfo = getAdditionalUserInfo(user)
+      if (!userInfo.isNewUser) {
+        createNewUser(user)
+      }
       const data = mapUserFromFirebaseAuthToUser(user)
       return data
     })

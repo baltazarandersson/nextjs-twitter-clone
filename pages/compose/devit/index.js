@@ -6,7 +6,7 @@ import { useRouter } from "next/router"
 import { Loader } from "@components/Loader"
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import SumbitButton from "@components/Buttons/SumbitButton"
+import ActionButton from "@components/Buttons/ActionButton"
 import Globe from "@components/Icons/Globe"
 import Head from "next/head"
 import Cross from "@components/Icons/Cross"
@@ -141,13 +141,13 @@ const ComposeDevit = () => {
                   <Globe height={16} width={16} />
                   <span>This devit is public</span>
                 </div>
-                <SumbitButton disabled={isButtonDisabled} type="sumbit">
+                <ActionButton disabled={isButtonDisabled} type="sumbit">
                   {status === 1 ? (
                     <Loader color={colors.dimmedGray} size={23} border={3} />
                   ) : (
                     "Devit"
                   )}
-                </SumbitButton>
+                </ActionButton>
               </div>
             </form>
           </div>

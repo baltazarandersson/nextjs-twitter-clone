@@ -11,16 +11,16 @@ export default function AppLayout({ children }) {
       <section>{children}</section>
       <nav>
         <LinkButton href="/home" title="Home" size={42} padding={6}>
-          <Home width={26} height={26} color={colors.primary} />
+          <Home width={26} height={26} color={colors.black} />
         </LinkButton>
         <LinkButton href="/search" title="Search" size={42} padding={6}>
-          <Search width={26} height={26} color={colors.primary} />
+          <Search width={26} height={26} color={colors.black} />
         </LinkButton>
         <LinkButton href="/compose/devit" title="Devit" size={42} padding={6}>
-          <Create width={26} height={26} color={colors.primary} />
+          <Create width={26} height={26} color={colors.black} />
         </LinkButton>
         <LinkButton href="/" title="profile" size={42} padding={6}>
-          <User width={26} height={26} color={colors.primary} />
+          <User width={26} height={26} color={colors.black} />
         </LinkButton>
       </nav>
       <style jsx>{`
