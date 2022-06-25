@@ -1,17 +1,19 @@
-import Avatar from "@components/Avatar"
+import Head from "next/head"
 import { addDevit, getFileURL, uploadImage } from "@firebase/client"
 import { useEffect, useState } from "react"
+
+import Avatar from "@components/Avatar"
 import { useRouter } from "next/router"
 import { Loader } from "@components/Loader"
-import { colors, fonts } from "@styles/theme"
-import { addOpacityToColor } from "@styles/utils"
 import ActionButton from "@components/Buttons/ActionButton"
 import Globe from "@components/Icons/Globe"
-import Head from "next/head"
 import Cross from "@components/Icons/Cross"
-import LinkButton from "@components/Buttons/LinkButton"
 import ArrowLeft from "@components/Icons/ArrowLeft"
 import { withAuth } from "@components/helpers/withAuth"
+import BackButton from "@components/Buttons/BackButton"
+
+import { colors, fonts } from "@styles/theme"
+import { addOpacityToColor } from "@styles/utils"
 
 const COMPOSE_STATES = {
   USER_NOT_KNOWN: 0,
@@ -100,59 +102,56 @@ const ComposeDevit = ({ user }) => {
         <title>Compose a new Devit / Devtter</title>
       </Head>
       <section>
-        <LinkButton
-          href="/home"
-          title="Back"
-          color={colors.black}
-          hoverColor={addOpacityToColor(colors.gray, 0.15)}
+        <BackButton
           size={34}
+          hoverColor={addOpacityToColor(colors.gray, 0.15)}
+          title="Back"
         >
           <ArrowLeft width={20} height={20} color={colors.black} />
-        </LinkButton>
-        {user && (
-          <div className="compose">
-            <Avatar src={user.avatar} alt={user.userName} />
-            <form onSubmit={handleSumbit}>
-              <div className="input-container">
-                <textarea
-                  placeholder="What's happening?"
-                  onDragEnter={handleDragEnter}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onChange={handleChange}
-                  value={devitContent}
-                ></textarea>
-                {imgURL && (
-                  <div className="image-container">
-                    <button
-                      onClick={() => setImgURL(null)}
-                      className="remove-image-button"
-                    >
-                      <Cross width={30} height={30} font-weight="bold" />
-                    </button>
-                    <img src={imgURL} />
-                  </div>
-                )}
-                <div className="upload-progress-bar" />
-              </div>
-              <div className="sumbit-devit-container">
-                <div className="sumbit-devit-info">
-                  <div className="globe">
-                    <Globe height={16} width={16} />
-                  </div>
-                  <span>This devit is public</span>
+        </BackButton>
+
+        <div className="compose">
+          <Avatar src={user.avatar} alt={user.userName} />
+          <form onSubmit={handleSumbit}>
+            <div className="input-container">
+              <textarea
+                placeholder="What's happening?"
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onChange={handleChange}
+                value={devitContent}
+              ></textarea>
+              {imgURL && (
+                <div className="image-container">
+                  <button
+                    onClick={() => setImgURL(null)}
+                    className="remove-image-button"
+                  >
+                    <Cross width={30} height={30} font-weight="bold" />
+                  </button>
+                  <img src={imgURL} />
                 </div>
-                <ActionButton disabled={isButtonDisabled} type="sumbit">
-                  {status === 1 ? (
-                    <Loader color={colors.dimmedGray} size={23} border={3} />
-                  ) : (
-                    "Devit"
-                  )}
-                </ActionButton>
+              )}
+              <div className="upload-progress-bar" />
+            </div>
+            <div className="sumbit-devit-container">
+              <div className="sumbit-devit-info">
+                <div className="globe">
+                  <Globe height={16} width={16} />
+                </div>
+                <span>This devit is public</span>
               </div>
-            </form>
-          </div>
-        )}
+              <ActionButton disabled={isButtonDisabled} type="sumbit">
+                {status === 1 ? (
+                  <Loader color={colors.dimmedGray} size={23} border={3} />
+                ) : (
+                  "Devit"
+                )}
+              </ActionButton>
+            </div>
+          </form>
+        </div>
       </section>
       <style jsx>{`
         .compose {

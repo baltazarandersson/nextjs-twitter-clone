@@ -16,6 +16,7 @@ export default function Devit({
   id,
   avatar,
   displayName,
+  userName,
   userUid,
   likes,
   comments,
@@ -37,21 +38,40 @@ export default function Devit({
     <>
       <article onClick={handleArticleClick}>
         <div className="avatar-container">
-          <Avatar src={avatar} alt={displayName} />
+          <Link href={`/${userName}`}>
+            <a onClick={(e) => e.stopPropagation()}>
+              <Avatar src={avatar} alt={displayName} />
+            </a>
+          </Link>
         </div>
         <div className="devit-container">
           <div className="devit-info-container">
-            <span className="user-name">{displayName}</span>
+            <Link href={`/${userName}`}>
+              <a
+                onClick={(e) => e.stopPropagation()}
+                className="text-ellipsis-container"
+              >
+                <span className="user-name">{displayName}</span>
+              </a>
+            </Link>
+            <Link href={`/${userName}`}>
+              <a
+                onClick={(e) => e.stopPropagation()}
+                className="text-ellipsis-container"
+              >
+                <span className="user-tag">@{userName}</span>
+              </a>
+            </Link>
             <TextSeparator />
             <Link href={`/status/${id}`}>
-              <a className="timestamp-container">
+              <a className="text-ellipsis-container">
                 <time className="timestamp" title={createdAtFormated}>
                   {timeAgo}
                 </time>
               </a>
             </Link>
           </div>
-          <div className="debit-content">
+          <div className="devit-content">
             <p>{content}</p>
             {img && <img src={img} />}
             <section className="interactions-container">
@@ -92,6 +112,11 @@ export default function Devit({
         </div>
       </article>
       <style jsx>{`
+        .text-ellipsis-container {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
         article {
           cursor: pointer;
           display: flex;
@@ -113,15 +138,11 @@ export default function Devit({
         .devit-info-container {
           display: flex;
         }
-        .timestamp-container {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
         .timestamp {
           color: ${colors.gray};
+          font-size: 15px;
         }
-        .debit-content {
+        .devit-content {
           display: flex;
           flex-direction: column;
         }
@@ -135,9 +156,11 @@ export default function Devit({
         }
         .user-name {
           font-weight: 600;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
+        }
+        .user-tag {
+          margin-left: 4px;
+          color: ${colors.gray};
+          font-size: 15px;
         }
         img {
           margin-top: 12px;
@@ -150,6 +173,9 @@ export default function Devit({
         }
         article:hover {
           background: ${addOpacityToColor(colors.dimmedGray, 0.8)};
+        }
+        .user-name:hover {
+          text-decoration: underline;
         }
       `}</style>
     </>

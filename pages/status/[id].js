@@ -1,14 +1,19 @@
 import Avatar from "@components/Avatar"
-import LinkButton from "@components/Buttons/LinkButton"
+import ActionButton from "@components/Buttons/ActionButton"
+import BackButton from "@components/Buttons/BackButton"
+import CommentsList from "@components/CommentsList"
 import ArrowLeft from "@components/Icons/ArrowLeft"
 import AppLayout from "@components/Layout/AppLayout"
 import Header from "@components/Layout/AppLayout/Header"
 import TextSeparator from "@components/TextSeparator"
+import { addCommentToDevit, listenLatestDevitComments } from "@firebase/client"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
+import useUser from "@hooks/useUser"
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import Head from "next/head"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -48,6 +53,34 @@ export default function DevitPage({
     day: "numeric",
     year: "numeric",
   })
+  const [replyContent, setReplyContent] = useState("")
+  const [devitComments, setDevitComments] = useState([])
+  const user = useUser()
+
+  const isButtonDisabled = !replyContent.length
+
+  useEffect(() => {
+    const unsub = listenLatestDevitComments(id, setDevitComments)
+    return () => unsub()
+  }, [])
+
+  const handleSumbit = async (e) => {
+    e.preventDefault()
+    const commentData = {
+      displayName: user.displayName,
+      userName: user.userName,
+      avatar: user.avatar,
+      content: replyContent,
+    }
+    addCommentToDevit(commentData, id).then(() => {
+      setReplyContent("")
+    })
+  }
+
+  const handleChange = (e) => {
+    const { value } = e.target
+    setReplyContent(value)
+  }
 
   return (
     <>
@@ -57,24 +90,43 @@ export default function DevitPage({
       <AppLayout>
         <Header>
           <div className="back-to-home-button">
-            <LinkButton
-              href="/home"
-              title="Back"
-              color={colors.black}
-              hoverColor={addOpacityToColor(colors.gray, 0.15)}
+            <BackButton
               size={34}
+              hoverColor={addOpacityToColor(colors.gray, 0.15)}
+              title="Back"
             >
               <ArrowLeft width={20} height={20} color={colors.black} />
-            </LinkButton>
+            </BackButton>
           </div>
           <h1>Devit</h1>
         </Header>
         <article>
           <div className="devit-headers-container">
-            <Avatar src={avatar} alt={displayName} />
+            <Link href={`/${userName}`}>
+              <a
+                onClick={(e) => e.stopPropagation()}
+                className="avatar-container"
+              >
+                <Avatar src={avatar} alt={displayName} />
+              </a>
+            </Link>
             <div className="devit-headers">
-              <span className="user-name">{displayName}</span>
-              <span className="user-tag">@{userName}</span>
+              <Link href={`/${userName}`}>
+                <a
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-ellipsis-container"
+                >
+                  <span className="user-name">{displayName}</span>
+                </a>
+              </Link>
+              <Link href={`/${userName}`}>
+                <a
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-ellipsis-container"
+                >
+                  <span className="user-tag">@{userName}</span>
+                </a>
+              </Link>
             </div>
           </div>
           <div className="devit-content-container">
@@ -91,6 +143,31 @@ export default function DevitPage({
             <span>Devtter Web App</span>
           </div>
         </article>
+        <section className="form-section-container">
+          <form className="post-comment-form" onSubmit={handleSumbit}>
+            <Link href={`/${userName}`}>
+              <a
+                onClick={(e) => e.stopPropagation()}
+                className="avatar-container"
+              >
+                <Avatar src={avatar} alt={displayName} />
+              </a>
+            </Link>
+            <textarea
+              placeholder="Devit your reply"
+              onChange={handleChange}
+              value={replyContent}
+            ></textarea>
+            <ActionButton
+              type="sumbit"
+              disabled={isButtonDisabled}
+              color={colors.primary}
+            >
+              Reply
+            </ActionButton>
+          </form>
+        </section>
+        <CommentsList list={devitComments} />
       </AppLayout>
       <style jsx>{`
         h1 {
@@ -103,7 +180,8 @@ export default function DevitPage({
         .devit-headers-container {
           display: flex;
         }
-        .devit-headers-container > :global(div) > :global(img) {
+        .avatar-container {
+          flex: 0 0 auto;
           margin-right: 12px;
         }
         .devit-headers {
@@ -134,11 +212,11 @@ export default function DevitPage({
           text-decoration: underline;
         }
         article {
+          width: 100%;
           display: flex;
           flex-direction: column;
           padding: 10px 15px;
           border-bottom: 1px solid ${colors.dimmedGray};
-          transition: background 0.2s ease-in-out;
         }
         p {
           font-size: 23px;
@@ -147,27 +225,50 @@ export default function DevitPage({
         }
         .user-name {
           font-weight: 600;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
         .user-tag {
           color: ${colors.gray};
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
         img {
           margin-top: 12px;
           width: 100%;
           border-radius: 10px;
         }
-        a {
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
         time {
           color: ${colors.gray};
+        }
+        .text-ellipsis-container {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .user-name:hover {
+          text-decoration: underline;
+        }
+        .form-section-container {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          padding: 10px 15px;
+          border-bottom: 1px solid ${colors.dimmedGray};
+        }
+        textarea {
+          border: none;
+          border-radius: 10px;
+          min-height: 40px;
+          outline: 0;
+          flex: 1 1 auto;
+          padding: 12px 8px;
+          margin-right: 12px;
+          font-size: 21px;
+          resize: none;
+          transition: border 0.2s ease;
+        }
+        .post-comment-form {
+          display: flex;
+          align-items: start;
+          justify-content: space-between;
         }
       `}</style>
     </>

@@ -1,20 +1,20 @@
+import { useEffect, useState } from "react"
 import Head from "next/head"
 
 import SumbitButton from "@components/Buttons/ActionButton"
 import AppLayout from "@components/Layout/AppLayout"
 import Header from "@components/Layout/AppLayout/Header"
-
-import { colors, fonts } from "@styles/theme"
 import Location from "@components/Icons/Location"
 import Calendar from "@components/Icons/Calendar"
-import { useEffect, useState } from "react"
 import { fetchLatestUserDevits } from "@firebase/client"
 import Devit from "@components/Devit"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
-import LinkButton from "@components/Buttons/LinkButton"
 import ArrowLeft from "@components/Icons/ArrowLeft"
-import { addOpacityToColor } from "@styles/utils"
 import { Loader } from "@components/Loader"
+import BackButton from "@components/Buttons/BackButton"
+
+import { colors, fonts } from "@styles/theme"
+import { addOpacityToColor } from "@styles/utils"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -64,15 +64,13 @@ export default function User({
       <AppLayout>
         <Header>
           <div className="back-to-home-button">
-            <LinkButton
-              href="/home"
-              title="Back"
-              color={colors.black}
-              hoverColor={addOpacityToColor(colors.gray, 0.15)}
+            <BackButton
               size={34}
+              hoverColor={addOpacityToColor(colors.gray, 0.15)}
+              title="Back"
             >
               <ArrowLeft width={20} height={20} color={colors.black} />
-            </LinkButton>
+            </BackButton>
           </div>
           <div className="header-info-container">
             <span className="header-user-name">{displayName}</span>
@@ -119,28 +117,30 @@ export default function User({
               userTimeLine?.map(
                 ({
                   id,
+                  userUid,
                   avatar,
                   displayName,
-                  userUid,
-                  likes,
-                  shares,
-                  comments,
+                  userName,
                   createdAt,
                   content,
+                  comments,
+                  shares,
+                  likes,
                   img,
                 }) => {
                   return (
                     <Devit
                       key={id}
-                      displayName={displayName}
-                      avatar={avatar}
-                      content={content}
                       id={id}
-                      userId={userUid}
-                      likes={likes}
-                      shares={shares}
-                      comments={comments}
+                      userUid={userUid}
+                      avatar={avatar}
+                      displayName={displayName}
+                      userName={userName}
                       createdAt={createdAt}
+                      content={content}
+                      comments={comments}
+                      shares={shares}
+                      likes={likes}
                       img={img}
                     />
                   )

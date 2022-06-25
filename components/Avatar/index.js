@@ -1,4 +1,10 @@
-export default function Avatar({ alt, src, text, size = 48 }) {
+export default function Avatar({
+  alt,
+  src,
+  text,
+  size = 48,
+  hoverOpacity = 0.9,
+}) {
   return (
     <>
       <div>
@@ -9,6 +15,7 @@ export default function Avatar({ alt, src, text, size = 48 }) {
         div {
           display: flex;
           align-items: center;
+          transition: filter 0.2s ease;
         }
         img {
           border-radius: 50%;
@@ -17,6 +24,9 @@ export default function Avatar({ alt, src, text, size = 48 }) {
         }
         img + strong {
           margin-left: 8px;
+        }
+        img:hover {
+          filter: brightness(${hoverOpacity});
         }
       `}</style>
     </>

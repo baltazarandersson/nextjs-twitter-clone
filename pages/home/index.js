@@ -29,7 +29,12 @@ const HomePage = ({ user }) => {
       <AppLayout>
         <Header>
           <div className="avatar-container">
-            <Avatar alt="user-avatar" src={user.avatar} size={32} />
+            <Avatar
+              alt="user-avatar"
+              src={user.avatar}
+              size={32}
+              hoverOpacity={1}
+            />
           </div>
           <h1>Home</h1>
         </Header>
@@ -38,28 +43,30 @@ const HomePage = ({ user }) => {
             timeline.map(
               ({
                 id,
+                userUid,
                 avatar,
                 displayName,
-                userUid,
-                likes,
-                shares,
-                comments,
+                userName,
                 createdAt,
                 content,
+                comments,
+                shares,
+                likes,
                 img,
               }) => {
                 return (
                   <Devit
                     key={id}
-                    displayName={displayName}
-                    avatar={avatar}
-                    content={content}
                     id={id}
-                    userId={userUid}
-                    likes={likes}
-                    shares={shares}
-                    comments={comments}
+                    userUid={userUid}
+                    avatar={avatar}
+                    displayName={displayName}
+                    userName={userName}
                     createdAt={createdAt}
+                    content={content}
+                    comments={comments}
+                    shares={shares}
+                    likes={likes}
                     img={img}
                   />
                 )

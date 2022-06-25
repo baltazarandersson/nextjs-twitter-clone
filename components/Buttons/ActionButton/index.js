@@ -5,6 +5,7 @@ export default function ActionButton({
   children,
   disabled,
   type = "button",
+  color = colors.black,
   styles,
 }) {
   return (
@@ -24,7 +25,7 @@ export default function ActionButton({
           font-weight: 700;
           padding: 8px 24px;
           transition: opacity 0.3s ease;
-          background-color: ${colors.black};
+          background-color: ${color};
           user-select: none;
           ${styles};
         }

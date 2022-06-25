@@ -1,7 +1,7 @@
 import LinkButton from "@components/Buttons/LinkButton"
 import Create from "@components/Icons/Create"
 import Home from "@components/Icons/Home"
-import Search from "@components/Icons/Search"
+import Star from "@components/Icons/Star"
 import User from "@components/Icons/User"
 import useUser from "@hooks/useUser"
 import { colors } from "@styles/theme"
@@ -24,12 +24,12 @@ export default function AppLayout({ children }) {
         </LinkButton>
         <LinkButton
           hoverColor={addOpacityToColor(colors.gray, 0.15)}
-          href="/search"
-          title="Search"
+          href="/following"
+          title="Following"
           size={42}
           padding={6}
         >
-          <Search width={26} height={26} color={colors.black} />
+          <Star width={26} height={26} color={colors.black} />
         </LinkButton>
         <LinkButton
           hoverColor={addOpacityToColor(colors.gray, 0.15)}
@@ -43,7 +43,7 @@ export default function AppLayout({ children }) {
         <LinkButton
           hoverColor={addOpacityToColor(colors.gray, 0.15)}
           href={`/${user?.userName}`}
-          title="profile"
+          title="Profile"
           size={42}
           padding={6}
         >

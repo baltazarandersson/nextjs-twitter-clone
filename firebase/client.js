@@ -119,6 +119,21 @@ export const loginWithGithub = async () => {
     })
 }
 
+export const addCommentToDevit = async (commentData, devitId) => {
+  const commentCollectionRef = collection(
+    database,
+    "devits",
+    `${devitId}`,
+    "comments"
+  )
+
+  return addDoc(commentCollectionRef, {
+    ...commentData,
+    createdAt: Timestamp.fromDate(new Date()),
+    likes: [],
+  })
+}
+
 export const addDevit = async ({
   avatar,
   content,
@@ -159,6 +174,18 @@ const mapDevtisFromFirebaseToDevitObject = (devitDoc) => {
     id: devitDoc.id,
     createdAt: fromTimeStampToDate(createdAt),
   }
+}
+
+export const listenLatestDevitComments = (devitId, callback) => {
+  const commentsQuery = query(
+    collection(database, "devits", `${devitId}`, "comments"),
+    orderBy("createdAt", "desc")
+  )
+  const unsub = onSnapshot(commentsQuery, (snapshot) => {
+    const data = snapshot.docs.map(mapDevtisFromFirebaseToDevitObject)
+    callback(data)
+  })
+  return unsub
 }
 
 export const listenLatestDevits = (callback) => {
