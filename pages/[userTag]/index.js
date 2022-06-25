@@ -7,6 +7,10 @@ import Header from "@components/Layout/AppLayout/Header"
 import { colors, fonts } from "@styles/theme"
 import Location from "@components/Icons/Location"
 import Calendar from "@components/Icons/Calendar"
+import { useEffect, useState } from "react"
+import { fetchLatestUserDevits } from "@firebase/client"
+import Devit from "@components/Devit"
+import useDateTimeFormat from "@hooks/useDateTimeFormat"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -29,14 +33,25 @@ export async function getServerSideProps(context) {
 export default function User({
   displayName,
   userName,
-  photoURL,
+  avatar,
+  uid,
   location,
+  creationDate,
   following,
   followers,
-  likes,
   email,
+  devits,
 }) {
-  console.log(following)
+  const [userTimeLine, setUserTimeline] = useState(undefined)
+  const parsedCreationDate = useDateTimeFormat(creationDate, "en-EN", {
+    month: "long",
+    year: "numeric",
+  })
+
+  useEffect(() => {
+    fetchLatestUserDevits(uid).then(setUserTimeline)
+  }, [])
+
   return (
     <>
       <Head>
@@ -49,7 +64,7 @@ export default function User({
           <section className="user-container">
             <div className="header-info">
               <div className="picture-container">
-                <img className="picture" src={photoURL} />
+                <img className="picture" src={avatar} />
               </div>
               <SumbitButton>Follow</SumbitButton>
             </div>
@@ -65,7 +80,7 @@ export default function User({
               </span>
               <span className="creation-date">
                 <Calendar />
-                <span>Joined March 2022</span>
+                <span>Joined {parsedCreationDate}</span>
               </span>
             </div>
             <div className="social-stats">
@@ -79,16 +94,48 @@ export default function User({
               </div>
             </div>
           </section>
+          <section>
+            {userTimeLine?.map(
+              ({
+                id,
+                avatar,
+                displayName,
+                userUid,
+                likes,
+                shares,
+                comments,
+                createdAt,
+                content,
+                img,
+              }) => {
+                return (
+                  <Devit
+                    key={id}
+                    displayName={displayName}
+                    avatar={avatar}
+                    content={content}
+                    id={id}
+                    userId={userUid}
+                    likes={likes}
+                    shares={shares}
+                    comments={comments}
+                    createdAt={createdAt}
+                    img={img}
+                  />
+                )
+              }
+            )}
+          </section>
         </section>
       </AppLayout>
       <style jsx>{`
         section {
           position: relative;
           width: 100%;
-          height: 100%;
           display: flex;
           flex-direction: column;
           align-items: stretch;
+          border-bottom: 1px solid ${colors.dimmedGray};
         }
         .cover-container {
           background-color: ${colors.primary};

@@ -17,9 +17,7 @@ export async function getServerSideProps(context) {
   const apiResponse = await fetch(`http://localhost:3000/api/devit/${id}`)
   if (apiResponse.ok) {
     const props = await apiResponse.json()
-    let userTag = props.userName.toLowerCase()
-    userTag = userTag.replace(/\s+/g, "")
-    return { props: { ...props, userTag } }
+    return { props }
   } else {
     return {
       redirect: {
@@ -32,15 +30,16 @@ export async function getServerSideProps(context) {
 
 export default function DevitPage({
   id,
+  displayName,
   userName,
   avatar,
   content,
-  userId,
-  likesCount,
-  sharesCount,
+  userUid,
+  likes,
+  comments,
+  shares,
   createdAt,
   img,
-  userTag,
 }) {
   const createdAtFormated = useDateTimeFormat(createdAt, "en-EN", {
     hour: "numeric",
@@ -53,7 +52,7 @@ export default function DevitPage({
   return (
     <>
       <Head>
-        <title>{userName + ' on Devtter: "' + content + '"'}</title>
+        <title>{displayName + ' on Devtter: "' + content + '"'}</title>
       </Head>
       <AppLayout>
         <Header>
@@ -72,10 +71,10 @@ export default function DevitPage({
         </Header>
         <article>
           <div className="devit-headers-container">
-            <Avatar src={avatar} alt={userName} />
+            <Avatar src={avatar} alt={displayName} />
             <div className="devit-headers">
-              <span className="user-name">{userName}</span>
-              <span className="user-tag">@{userTag}</span>
+              <span className="user-name">{displayName}</span>
+              <span className="user-tag">@{userName}</span>
             </div>
           </div>
           <div className="devit-content-container">

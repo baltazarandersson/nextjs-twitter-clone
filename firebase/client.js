@@ -1,6 +1,7 @@
 import { getApps, initializeApp } from "firebase/app"
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -11,6 +12,8 @@ import {
   query,
   setDoc,
   Timestamp,
+  updateDoc,
+  where,
 } from "firebase/firestore"
 import {
   getAuth,
@@ -25,6 +28,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage"
+import { fromTimeStampToDate } from "utils/fromTimestampToDate"
 
 const firebaseConfig = {
   apiKey: "AIzaSyCVRHfNae985X4lcSf19vz5dQU0GkLkJSY",
@@ -61,8 +65,8 @@ const mapUserFromFirebaseAuthToUser = (userInfo) => {
 export const onAuthChange = (onChange) => {
   const unsuscribe = onAuthStateChanged(auth, (userCredentials) => {
     if (userCredentials) {
-      const user = mapUserFromFirebaseAuthToUser(userCredentials)
-      onChange(user)
+      const { uid } = userCredentials
+      getUserInfoByUid(uid).then(onChange)
     } else {
       onChange(null)
     }
@@ -73,7 +77,6 @@ export const onAuthChange = (onChange) => {
 export const createNewUser = async (firebaseUser) => {
   const { profile } = getAdditionalUserInfo(firebaseUser)
   const { user } = firebaseUser
-  console.log(user)
   const { uid, photoURL } = user
 
   const { login: userName, email, name: displayName, location } = profile
@@ -81,12 +84,14 @@ export const createNewUser = async (firebaseUser) => {
     userName,
     uid,
     email,
-    photoURL,
+    avatar: photoURL,
     displayName,
     location,
+    creationDate: Timestamp.fromDate(new Date()),
     followers: [],
     following: [],
     likes: [],
+    devits: [],
   }
   return await setDoc(doc(database, "users", `${uid}`), newUser)
 }
@@ -114,17 +119,31 @@ export const loginWithGithub = async () => {
     })
 }
 
-export const addDevit = async ({ avatar, content, userId, userName, img }) => {
+export const addDevit = async ({
+  avatar,
+  content,
+  userUid,
+  userName,
+  displayName,
+  img,
+}) => {
   try {
-    return await addDoc(collection(database, "devits"), {
+    const devitRef = await addDoc(collection(database, "devits"), {
       avatar,
       content,
-      userId,
+      userUid,
+      displayName,
       userName,
       createdAt: Timestamp.fromDate(new Date()),
-      likesCount: 0,
-      sharesCount: 0,
+      likes: [],
+      comments: [],
+      shares: [],
       img,
+    })
+    const devitId = devitRef.id
+
+    return updateDoc(doc(database, "users", `${userUid}`), {
+      devits: arrayUnion(devitId),
     })
   } catch (error) {
     console.error(error)
@@ -134,7 +153,12 @@ export const addDevit = async ({ avatar, content, userId, userName, img }) => {
 const mapDevtisFromFirebaseToDevitObject = (devitDoc) => {
   const devitData = devitDoc.data()
   const { createdAt } = devitData
-  return { ...devitData, id: devitDoc.id, createdAt: +createdAt.toDate() }
+
+  return {
+    ...devitData,
+    id: devitDoc.id,
+    createdAt: fromTimeStampToDate(createdAt),
+  }
 }
 
 export const listenLatestDevits = (callback) => {
@@ -149,10 +173,11 @@ export const listenLatestDevits = (callback) => {
   return unsub
 }
 
-export const fetchLatestDevits = async () => {
+export const fetchLatestUserDevits = async (userUid) => {
   try {
     const docsQuery = query(
       collection(database, "devits"),
+      where("userUid", "==", userUid),
       orderBy("createdAt", "desc")
     )
 

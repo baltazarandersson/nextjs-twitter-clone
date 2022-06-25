@@ -1,5 +1,4 @@
 import Avatar from "@components/Avatar"
-import useUser from "@hooks/useUser"
 import { addDevit, getFileURL, uploadImage } from "@firebase/client"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
@@ -29,7 +28,7 @@ const DRAG_IMAGES_STATES = {
   COMPLETE: 3,
 }
 
-const ComposeDevit = () => {
+const ComposeDevit = ({ user }) => {
   const [devitContent, setDevitContent] = useState("")
   const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN)
   const [drag, setDrag] = useState(DRAG_IMAGES_STATES.NONE)
@@ -37,7 +36,6 @@ const ComposeDevit = () => {
   const [imgURL, setImgURL] = useState(null)
   const [uploadProgress, setUploadProgress] = useState(0)
 
-  const user = useUser()
   const router = useRouter()
 
   useEffect(() => {
@@ -72,7 +70,8 @@ const ComposeDevit = () => {
     addDevit({
       avatar: user.avatar,
       content: devitContent,
-      userId: user.uid,
+      userUid: user.uid,
+      displayName: user.displayName,
       userName: user.userName,
       img: imgURL,
     }).then(router.push("/home/"))
@@ -138,7 +137,9 @@ const ComposeDevit = () => {
               </div>
               <div className="sumbit-devit-container">
                 <div className="sumbit-devit-info">
-                  <Globe height={16} width={16} />
+                  <div className="globe">
+                    <Globe height={16} width={16} />
+                  </div>
                   <span>This devit is public</span>
                 </div>
                 <ActionButton disabled={isButtonDisabled} type="sumbit">
@@ -206,6 +207,7 @@ const ComposeDevit = () => {
         }
         form {
           flex-grow: 1;
+          min-width: 0;
         }
         .sumbit-devit-container {
           display: flex;
@@ -221,6 +223,9 @@ const ComposeDevit = () => {
           border-radius: 9999px;
           color: ${addOpacityToColor(colors.primary, 0.9)};
           transition: background 0.2s ease-in-out;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .sumbit-devit-info:hover {
           background: ${addOpacityToColor(colors.primary, 0.1)};
@@ -228,11 +233,14 @@ const ComposeDevit = () => {
         .sumbit-devit-info > span {
           font-family: ${fonts.secondary};
           letter-spacing: 1px;
-          font-size: 16px;
+          font-size: 14px;
           margin-left: 8px;
           font-weight: 600;
           vertical-align: middle;
           display: inline-block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         textarea {
           border: ${drag === DRAG_IMAGES_STATES.DRAG_OVER

@@ -15,10 +15,11 @@ import { useRouter } from "next/router"
 export default function Devit({
   id,
   avatar,
-  userName,
-  userId,
-  likesCount,
-  sharesCount,
+  displayName,
+  userUid,
+  likes,
+  comments,
+  shares,
   createdAt,
   content,
   img,
@@ -36,11 +37,11 @@ export default function Devit({
     <>
       <article onClick={handleArticleClick}>
         <div className="avatar-container">
-          <Avatar src={avatar} alt={userName} />
+          <Avatar src={avatar} alt={displayName} />
         </div>
         <div className="devit-container">
           <div className="devit-info-container">
-            <span className="user-name">{userName}</span>
+            <span className="user-name">{displayName}</span>
             <TextSeparator />
             <Link href={`/status/${id}`}>
               <a className="timestamp-container">

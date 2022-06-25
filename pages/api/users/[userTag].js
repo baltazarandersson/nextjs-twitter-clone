@@ -1,4 +1,5 @@
 import { adminFirestore } from "@firebase/admin/admin"
+import { fromTimeStampToDate } from "utils/fromTimestampToDate"
 
 export default (req, res) => {
   const { query } = req
@@ -12,8 +13,12 @@ export default (req, res) => {
       const [user] = querySnap.docs.map((userDoc) => {
         return userDoc.data()
       })
+      const { creationDate } = user
+
       if (user) {
-        res.status(200).json(user)
+        res
+          .status(200)
+          .json({ ...user, creationDate: fromTimeStampToDate(creationDate) })
       } else {
         res.status(404).json({
           errors: {

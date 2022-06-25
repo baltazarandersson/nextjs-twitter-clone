@@ -39,10 +39,11 @@ const HomePage = ({ user }) => {
               ({
                 id,
                 avatar,
-                userName,
-                userId,
-                likesCount,
-                sharesCount,
+                displayName,
+                userUid,
+                likes,
+                shares,
+                comments,
                 createdAt,
                 content,
                 img,
@@ -50,13 +51,14 @@ const HomePage = ({ user }) => {
                 return (
                   <Devit
                     key={id}
-                    userName={userName}
+                    displayName={displayName}
                     avatar={avatar}
                     content={content}
                     id={id}
-                    userId={userId}
-                    likesCount={likesCount}
-                    sharesCount={sharesCount}
+                    userId={userUid}
+                    likes={likes}
+                    shares={shares}
+                    comments={comments}
                     createdAt={createdAt}
                     img={img}
                   />

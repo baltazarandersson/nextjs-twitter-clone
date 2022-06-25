@@ -3,23 +3,50 @@ import Create from "@components/Icons/Create"
 import Home from "@components/Icons/Home"
 import Search from "@components/Icons/Search"
 import User from "@components/Icons/User"
+import useUser from "@hooks/useUser"
 import { colors } from "@styles/theme"
+import { addOpacityToColor } from "@styles/utils"
 
 export default function AppLayout({ children }) {
+  const user = useUser()
   return (
     <>
       <section>{children}</section>
       <nav>
-        <LinkButton href="/home" title="Home" size={42} padding={6}>
+        <LinkButton
+          hoverColor={addOpacityToColor(colors.gray, 0.15)}
+          href="/home"
+          title="Home"
+          size={42}
+          padding={6}
+        >
           <Home width={26} height={26} color={colors.black} />
         </LinkButton>
-        <LinkButton href="/search" title="Search" size={42} padding={6}>
+        <LinkButton
+          hoverColor={addOpacityToColor(colors.gray, 0.15)}
+          href="/search"
+          title="Search"
+          size={42}
+          padding={6}
+        >
           <Search width={26} height={26} color={colors.black} />
         </LinkButton>
-        <LinkButton href="/compose/devit" title="Devit" size={42} padding={6}>
+        <LinkButton
+          hoverColor={addOpacityToColor(colors.gray, 0.15)}
+          href="/compose/devit"
+          title="Devit"
+          size={42}
+          padding={6}
+        >
           <Create width={26} height={26} color={colors.black} />
         </LinkButton>
-        <LinkButton href="/" title="profile" size={42} padding={6}>
+        <LinkButton
+          hoverColor={addOpacityToColor(colors.gray, 0.15)}
+          href={`/${user?.userName}`}
+          title="profile"
+          size={42}
+          padding={6}
+        >
           <User width={26} height={26} color={colors.black} />
         </LinkButton>
       </nav>
