@@ -68,8 +68,8 @@ export default function Devit({
               </a>
             </Link>
           </div>
-          <div className="devit-content">
-            <p>{content}</p>
+          <div className="devit-content-container">
+            <p className="devit-content">{content}</p>
             {img && <img src={img} />}
             <div>
               <section
@@ -119,9 +119,12 @@ export default function Devit({
           color: ${colors.gray};
           font-size: 15px;
         }
-        .devit-content {
+        .devit-content-container {
           display: flex;
           flex-direction: column;
+        }
+        .devit-content {
+          word-break: break-word;
         }
         .user-name {
           font-weight: 600;

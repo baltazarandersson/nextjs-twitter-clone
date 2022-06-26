@@ -243,6 +243,7 @@ export default function User({
           display: flex;
           align-items: center;
           margin-right: 12px;
+          min-width: 0;
         }
         .account-info :global(svg) {
           width: 18px;

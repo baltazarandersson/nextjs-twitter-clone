@@ -74,8 +74,13 @@ const ComposeDevit = ({ user }) => {
     }
   }, [task])
 
-  const isButtonDisabled =
-    !devitContent.length || status === COMPOSE_STATES.LOADING
+  const isButtonDisabled = useMemo(() => {
+    return (
+      !devitContent.length ||
+      devitContent.length > 280 ||
+      status === COMPOSE_STATES.LOADING
+    )
+  }, [devitContent, status])
 
   const handleChange = (event) => {
     const { value } = event.target
@@ -104,11 +109,16 @@ const ComposeDevit = ({ user }) => {
   }
   const handleDrop = (e) => {
     e.preventDefault()
-    setDrag(DRAG_IMAGES_STATES.NONE)
-    const file = e.dataTransfer.files[0]
+    try {
+      console.log(e)
+      setDrag(DRAG_IMAGES_STATES.NONE)
+      const file = e.dataTransfer.files[0]
 
-    const uploadTask = uploadImage(file)
-    setTask(uploadTask)
+      const uploadTask = uploadImage(file)
+      setTask(uploadTask)
+    } catch (error) {
+      setStatus(COMPOSE_STATES.ERROR)
+    }
   }
 
   return (
@@ -129,7 +139,7 @@ const ComposeDevit = ({ user }) => {
             <Avatar src={user.avatar} alt={user.userName} />
           </div>
           <form onSubmit={handleSumbit}>
-            <div>
+            <div className="inputs-container">
               <div className="textarea-input-container">
                 <textarea
                   placeholder="What's happening?"
@@ -170,8 +180,8 @@ const ComposeDevit = ({ user }) => {
               <div className="sumbit-button-container">
                 <StringCounter characters={devitContent.length} />
                 <ActionButton disabled={isButtonDisabled} type="sumbit">
-                  {status === 1 ? (
-                    <Loader color={colors.dimmedGray} size={23} border={3} />
+                  {status === COMPOSE_STATES.LOADING ? (
+                    <Loader color={colors.dimmedGray} size={16} border={3} />
                   ) : (
                     "Devit"
                   )}
@@ -270,7 +280,11 @@ const ComposeDevit = ({ user }) => {
         }
         .sumbit-button-container {
           display: flex;
-          gap: 4px;
+          align-items: center;
+          gap: 12px;
+        }
+        .inputs-container {
+          position: relative;
         }
         .textarea-input-container {
           position: relative;
@@ -311,7 +325,7 @@ const ComposeDevit = ({ user }) => {
         }
 
         .textarea-back--exceded-characters {
-          background: ${addOpacityToColor(colors.error, 0.5)};
+          background: ${addOpacityToColor(colors.error, 0.4)};
         }
       `}</style>
     </>
@@ -319,19 +333,3 @@ const ComposeDevit = ({ user }) => {
 }
 
 export default withAuth(ComposeDevit)
-
-// textarea {
-//   border: ${drag === DRAG_IMAGES_STATES.DRAG_OVER
-//   ? `2px dashed ${colors.primary}`
-//   : "2px dashed transparent"};
-//   border-radius: 10px;
-//   min-height: 120px;
-//   outline: 0;
-//   width: -webkit-fill-available;
-//   margin: 0 12px 12px 12px;
-//   padding: 12px 8px;
-//   font-size: 18px;
-//   resize: none;
-//   transition: border 0.2s ease;
-//   max
-// }

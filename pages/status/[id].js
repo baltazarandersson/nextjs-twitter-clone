@@ -133,7 +133,7 @@ export default function DevitPage({
             </div>
           </div>
           <div className="devit-content-container">
-            <p>{content}</p>
+            <p className="devit-content">{content}</p>
             {img && <img src={img} />}
           </div>
           <div className="devit-info-container">
@@ -220,6 +220,9 @@ export default function DevitPage({
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+        }
+        .devit-content {
+          word-break: break-word;
         }
         time {
           white-space: nowrap;

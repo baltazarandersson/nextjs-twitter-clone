@@ -9,11 +9,10 @@ export default function StringCounter({ characters = 0, maxLength = 280 }) {
   const compensation = progress >= 93 ? 2 : 10
 
   let primaryColor = progress >= 93 ? "#FFAD1F" : colors.primary
-  const secondaryColor = colors.primary
+  const secondaryColor = "#eff3f4"
   const textColor = progress >= 100 ? colors.error : "#FFAD1F"
-  const opacity = 0.3
   const stroke = 2
-  const size = 30
+  const size = 32
 
   if (progress >= 100) {
     primaryColor = colors.error
@@ -23,11 +22,6 @@ export default function StringCounter({ characters = 0, maxLength = 280 }) {
   const subtractionSize = size - stroke * 2 - compensation
   const circumference = subtractionSize * Math.PI
   const percentage = circumference - (progress / 100) * circumference
-
-  const addOpacityToColor = () => {
-    const opacityHex = Math.round(opacity * 255).toString(16)
-    return `${secondaryColor}${opacityHex}`
-  }
 
   useEffect(() => {
     if (progress >= 93) {
@@ -42,7 +36,7 @@ export default function StringCounter({ characters = 0, maxLength = 280 }) {
       <section>
         <svg height={size} width={size}>
           <circle
-            stroke={addOpacityToColor()}
+            stroke={secondaryColor}
             strokeWidth={stroke}
             fill="transparent"
             r={subtractionSize / 2}
