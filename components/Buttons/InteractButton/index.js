@@ -7,23 +7,33 @@ export default function InteractButton({
   title = "button",
   hoverColor,
   hoverBgColor = addOpacityToColor(colors.primary, 0.1),
-  padding = 8,
   size = 34,
+  color = colors.gray,
+  count,
 }) {
   return (
     <>
       <section onClick={() => onClick && onClick()} title={title}>
+        <span>{count}</span>
         <div />
         {children}
       </section>
       <style jsx>{`
         section {
+          color: ${color};
           position: relative;
           display: flex;
           width: ${size}px;
           height: ${size}px;
           border: none;
           background: inherit;
+          justify-content: center;
+          align-items: center;
+        }
+        section > span {
+          position: absolute;
+          left: 30px;
+          font-size: 13px;
         }
         section > div {
           position: absolute;
@@ -36,10 +46,14 @@ export default function InteractButton({
           transition: background 0.2s ease;
         }
         section > :global(svg) {
+          color: ${color};
           display: block;
         }
         section > div:hover {
           background: ${hoverBgColor};
+        }
+        section:hover {
+          color: ${hoverColor};
         }
         section:hover :global(svg) {
           color: ${hoverColor};

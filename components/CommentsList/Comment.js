@@ -13,7 +13,7 @@ export default function Comment({
   createdAt,
   displayName,
   userName,
-  likes,
+  likedBy,
   content,
 }) {
   const timeAgo = useTimeAgo(createdAt)

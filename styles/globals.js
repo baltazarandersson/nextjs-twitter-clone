@@ -6,19 +6,6 @@ const backgroundColor = addOpacityToColor(colors.primary, 0.3)
 
 export default css.global`
   html,
-  body {
-    overflow: hidden;
-    background-image: radial-gradient(
-        ${backgroundColor} 1px,
-        ${colors.dimmedGray} 1px
-      ),
-      radial-gradient(${backgroundColor} 1px, ${colors.dimmedGray} 1px);
-    background-position: 0, 0, 25px, 25px;
-    background-size: 50px 50px;
-    font-family: ${fonts.base};
-    color: ${colors.black};
-  }
-  html,
   body,
   div,
   span,
@@ -105,6 +92,22 @@ export default css.global`
     font-size: 100%;
     vertical-align: baseline;
   }
+
+  html,
+  body {
+    overflow: hidden;
+    background-image: radial-gradient(
+        ${backgroundColor} 1px,
+        ${colors.dimmedGray} 1px
+      ),
+      radial-gradient(${backgroundColor} 1px, ${colors.dimmedGray} 1px);
+    background-position: 0, 0, 25px, 25px;
+    background-size: 50px 50px;
+    font-family: ${fonts.base};
+    color: ${colors.black};
+    font-size: 15px;
+  }
+
   a {
     color: inherit;
     text-decoration: none;
@@ -132,5 +135,10 @@ export default css.global`
     background-color: ${addOpacityToColor(colors.primary, 0.8)};
     border-radius: 10px;
     border: 3px solid #fff;
+  }
+
+  svg {
+    min-width: fit-content;
+    min-height: fit-content;
   }
 `

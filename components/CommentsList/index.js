@@ -4,7 +4,15 @@ export default function CommentsList({ list }) {
   return (
     <>
       {list.map(
-        ({ avatar, createdAt, displayName, userName, content, likes, id }) => {
+        ({
+          avatar,
+          createdAt,
+          displayName,
+          userName,
+          content,
+          likedBy,
+          id,
+        }) => {
           return (
             <Comment
               key={id}
@@ -13,7 +21,7 @@ export default function CommentsList({ list }) {
               displayName={displayName}
               userName={userName}
               content={content}
-              likes={likes}
+              likedBy={likedBy}
             />
           )
         }

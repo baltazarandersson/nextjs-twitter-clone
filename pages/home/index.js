@@ -49,9 +49,9 @@ const HomePage = ({ user }) => {
                 userName,
                 createdAt,
                 content,
-                comments,
+                commentsCount,
                 shares,
-                likes,
+                likedBy,
                 img,
               }) => {
                 return (
@@ -64,9 +64,9 @@ const HomePage = ({ user }) => {
                     userName={userName}
                     createdAt={createdAt}
                     content={content}
-                    comments={comments}
+                    commentsCount={commentsCount}
                     shares={shares}
-                    likes={likes}
+                    likedBy={likedBy}
                     img={img}
                   />
                 )

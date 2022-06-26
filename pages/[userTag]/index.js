@@ -123,9 +123,9 @@ export default function User({
                   userName,
                   createdAt,
                   content,
-                  comments,
+                  commentsCount,
                   shares,
-                  likes,
+                  likedBy,
                   img,
                 }) => {
                   return (
@@ -138,9 +138,9 @@ export default function User({
                       userName={userName}
                       createdAt={createdAt}
                       content={content}
-                      comments={comments}
+                      commentsCount={commentsCount}
                       shares={shares}
-                      likes={likes}
+                      likedBy={likedBy}
                       img={img}
                     />
                   )

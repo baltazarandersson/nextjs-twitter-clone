@@ -1,12 +1,14 @@
 import { getApps, initializeApp } from "firebase/app"
 import {
   addDoc,
+  arrayRemove,
   arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
   getFirestore,
+  increment,
   onSnapshot,
   orderBy,
   query,
@@ -120,6 +122,9 @@ export const loginWithGithub = async () => {
 }
 
 export const addCommentToDevit = async (commentData, devitId) => {
+  updateDoc(doc(database, "devits", `${devitId}`), {
+    commentsCount: increment(1),
+  })
   const commentCollectionRef = collection(
     database,
     "devits",
@@ -130,7 +135,7 @@ export const addCommentToDevit = async (commentData, devitId) => {
   return addDoc(commentCollectionRef, {
     ...commentData,
     createdAt: Timestamp.fromDate(new Date()),
-    likes: [],
+    likedBy: [],
   })
 }
 
@@ -150,8 +155,8 @@ export const addDevit = async ({
       displayName,
       userName,
       createdAt: Timestamp.fromDate(new Date()),
-      likes: [],
-      comments: [],
+      likedBy: [],
+      commentsCount: 0,
       shares: [],
       img,
     })
@@ -226,4 +231,30 @@ export const getFileURL = (uploadTask, settter) => {
   getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
     settter(downloadURL)
   })
+}
+
+export const likeDevit = (devitId, userUid) => {
+  const devitDocRef = doc(database, "devits", `${devitId}`)
+
+  updateDoc(devitDocRef, {
+    likedBy: arrayUnion(userUid),
+  })
+}
+
+export const unlikeDevit = (devitId, userUid) => {
+  const devitDocRef = doc(database, "devits", `${devitId}`)
+
+  updateDoc(devitDocRef, {
+    likedBy: arrayRemove(userUid),
+  })
+}
+
+export const listenToDevitChanges = (devitId, callback) => {
+  const devitDocRef = doc(database, "devits", `${devitId}`)
+  const unsub = onSnapshot(devitDocRef, (devit) => {
+    const data = devit.data()
+    console.log(data)
+    callback(data)
+  })
+  return unsub
 }

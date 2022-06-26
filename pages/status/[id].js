@@ -2,6 +2,7 @@ import Avatar from "@components/Avatar"
 import ActionButton from "@components/Buttons/ActionButton"
 import BackButton from "@components/Buttons/BackButton"
 import CommentsList from "@components/CommentsList"
+import DevitInteractions from "@components/Devit/DevitInteractions"
 import ArrowLeft from "@components/Icons/ArrowLeft"
 import AppLayout from "@components/Layout/AppLayout"
 import Header from "@components/Layout/AppLayout/Header"
@@ -13,7 +14,7 @@ import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import Head from "next/head"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -40,8 +41,8 @@ export default function DevitPage({
   avatar,
   content,
   userUid,
-  likes,
-  comments,
+  likedBy,
+  commentsCount,
   shares,
   createdAt,
   img,
@@ -57,8 +58,10 @@ export default function DevitPage({
   const [devitComments, setDevitComments] = useState([])
   const user = useUser()
 
-  const isButtonDisabled = !replyContent.length
-
+  const isButtonDisabled = useMemo(
+    () => !replyContent.length || !user,
+    [replyContent, user]
+  )
   useEffect(() => {
     const unsub = listenLatestDevitComments(id, setDevitComments)
     return () => unsub()
@@ -143,30 +146,43 @@ export default function DevitPage({
             <span>Devtter Web App</span>
           </div>
         </article>
-        <section className="form-section-container">
-          <form className="post-comment-form" onSubmit={handleSumbit}>
-            <Link href={`/${userName}`}>
-              <a
-                onClick={(e) => e.stopPropagation()}
-                className="avatar-container"
-              >
-                <Avatar src={avatar} alt={displayName} />
-              </a>
-            </Link>
-            <textarea
-              placeholder="Devit your reply"
-              onChange={handleChange}
-              value={replyContent}
-            ></textarea>
-            <ActionButton
-              type="sumbit"
-              disabled={isButtonDisabled}
-              color={colors.primary}
-            >
-              Reply
-            </ActionButton>
-          </form>
-        </section>
+        {user && (
+          <>
+            <section className="interactions-container">
+              <DevitInteractions
+                likedBy={likedBy}
+                commentsCount={commentsCount}
+                shares={shares}
+                id={id}
+                userUid={userUid}
+              />
+            </section>
+            <section className="form-section-container">
+              <form className="post-comment-form" onSubmit={handleSumbit}>
+                <Link href={`/${userName}`}>
+                  <a
+                    onClick={(e) => e.stopPropagation()}
+                    className="avatar-container"
+                  >
+                    <Avatar src={user.avatar} alt={displayName} />
+                  </a>
+                </Link>
+                <textarea
+                  placeholder="Devit your reply"
+                  onChange={handleChange}
+                  value={replyContent}
+                ></textarea>
+                <ActionButton
+                  type="sumbit"
+                  disabled={isButtonDisabled}
+                  color={colors.primary}
+                >
+                  Reply
+                </ActionButton>
+              </form>
+            </section>
+          </>
+        )}
         <CommentsList list={devitComments} />
       </AppLayout>
       <style jsx>{`
@@ -269,6 +285,11 @@ export default function DevitPage({
           display: flex;
           align-items: start;
           justify-content: space-between;
+        }
+        .interactions-container {
+          width: 100%;
+          padding: 12px 15px;
+          border-bottom: 1px solid ${colors.dimmedGray};
         }
       `}</style>
     </>

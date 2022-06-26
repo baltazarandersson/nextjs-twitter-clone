@@ -22,6 +22,7 @@ export default function BackButton({
       </a>
       <style jsx>{`
         a {
+          cursor: pointer;
           display: block;
           width: ${size}px;
           height: ${size}px;
