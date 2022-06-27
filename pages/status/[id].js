@@ -1,11 +1,11 @@
 import Avatar from "@components/Avatar"
-import ActionButton from "@components/Buttons/ActionButton"
 import BackButton from "@components/Buttons/BackButton"
 import CommentsList from "@components/CommentsList"
 import DevitInteractions from "@components/Devit/DevitInteractions"
 import ArrowLeft from "@components/Icons/ArrowLeft"
 import AppLayout from "@components/Layout/AppLayout"
 import Header from "@components/Layout/AppLayout/Header"
+import TextComposer from "@components/TextComposer"
 import TextSeparator from "@components/TextSeparator"
 import { addCommentToDevit, listenLatestDevitComments } from "@firebase/client"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
@@ -14,7 +14,7 @@ import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import Head from "next/head"
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -54,35 +54,26 @@ export default function DevitPage({
     day: "numeric",
     year: "numeric",
   })
-  const [replyContent, setReplyContent] = useState("")
   const [devitComments, setDevitComments] = useState([])
   const user = useUser()
 
-  const isButtonDisabled = useMemo(
-    () => !replyContent.length || !user,
-    [replyContent, user]
-  )
   useEffect(() => {
     const unsub = listenLatestDevitComments(id, setDevitComments)
     return () => unsub()
   }, [])
 
-  const handleSumbit = async (e) => {
-    e.preventDefault()
-    const commentData = {
-      displayName: user.displayName,
-      userName: user.userName,
-      avatar: user.avatar,
-      content: replyContent,
-    }
-    addCommentToDevit(commentData, id).then(() => {
-      setReplyContent("")
-    })
-  }
-
-  const handleChange = (e) => {
-    const { value } = e.target
-    setReplyContent(value)
+  const handleSumbit = async (content, imgURL) => {
+    return addCommentToDevit(
+      {
+        avatar: user.avatar,
+        content,
+        userUid: user.uid,
+        displayName: user.displayName,
+        userName: user.userName,
+        img: imgURL,
+      },
+      id
+    )
   }
 
   return (
@@ -155,31 +146,17 @@ export default function DevitPage({
                 shares={shares}
                 id={id}
                 userUid={userUid}
+                size={26}
+                justify={"space-around"}
               />
             </section>
             <section className="form-section-container">
-              <form className="post-comment-form" onSubmit={handleSumbit}>
-                <Link href={`/${userName}`}>
-                  <a
-                    onClick={(e) => e.stopPropagation()}
-                    className="avatar-container"
-                  >
-                    <Avatar src={user.avatar} alt={displayName} />
-                  </a>
-                </Link>
-                <textarea
-                  placeholder="Devit your reply"
-                  onChange={handleChange}
-                  value={replyContent}
-                ></textarea>
-                <ActionButton
-                  type="sumbit"
-                  disabled={isButtonDisabled}
-                  color={colors.primary}
-                >
-                  Reply
-                </ActionButton>
-              </form>
+              <TextComposer
+                user={user}
+                onSumbit={handleSumbit}
+                placeholder="Devit your reply"
+                size={80}
+              />
             </section>
           </>
         )}
@@ -271,23 +248,6 @@ export default function DevitPage({
           align-items: stretch;
           padding: 10px 15px;
           border-bottom: 1px solid ${colors.dimmedGray};
-        }
-        textarea {
-          border: none;
-          border-radius: 10px;
-          min-height: 40px;
-          outline: 0;
-          flex: 1 1 auto;
-          padding: 12px 8px;
-          margin-right: 12px;
-          font-size: 21px;
-          resize: none;
-          transition: border 0.2s ease;
-        }
-        .post-comment-form {
-          display: flex;
-          align-items: start;
-          justify-content: space-between;
         }
         .interactions-container {
           width: 100%;

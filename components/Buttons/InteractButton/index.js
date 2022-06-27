@@ -37,8 +37,10 @@ export default function InteractButton({
         }
         section > span {
           position: absolute;
-          left: 30px;
-          font-size: 13px;
+          left: ${size * 1.8}px;
+          font-size: ${size / 1.4}px;
+          height: ${size}px;
+          line-height: ${size}px;
         }
         section > div {
           position: absolute;

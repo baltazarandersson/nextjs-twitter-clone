@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 
-import SumbitButton from "@components/Buttons/ActionButton"
+import ActionButton from "@components/Buttons/ActionButton"
 import AppLayout from "@components/Layout/AppLayout"
 import Header from "@components/Layout/AppLayout/Header"
 import Location from "@components/Icons/Location"
 import Calendar from "@components/Icons/Calendar"
-import { fetchLatestUserDevits } from "@firebase/client"
+import {
+  fetchLatestUserDevits,
+  followUser,
+  unfollowUser,
+} from "@firebase/client"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import ArrowLeft from "@components/Icons/ArrowLeft"
 import BackButton from "@components/Buttons/BackButton"
@@ -14,6 +18,7 @@ import BackButton from "@components/Buttons/BackButton"
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import Timeline from "@containers/Timeline"
+import useUser from "@hooks/useUser"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -33,7 +38,12 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function User({
+const FOLLOWING_STATES = {
+  NOT_FOLLOWING: 0,
+  FOLLOWING: 1,
+}
+
+export default function UserProfile({
   displayName,
   userName,
   avatar,
@@ -41,11 +51,43 @@ export default function User({
   location,
   creationDate,
   following,
+  followingCount,
   followers,
+  followersCount,
   email,
   devits,
 }) {
   const [userTimeLine, setUserTimeline] = useState(undefined)
+  const [followingState, setFollowingState] = useState(
+    FOLLOWING_STATES.NOT_FOLLOWING
+  )
+  const [isButtonHovered, setButtonHover] = useState(false)
+
+  const user = useUser()
+
+  const isButtonDisabled = useMemo(() => {
+    return !user
+  }, [user])
+  const followButtonValue = useMemo(() => {
+    if (followingState === FOLLOWING_STATES.FOLLOWING) {
+      if (isButtonHovered) {
+        return "Unfollow"
+      } else {
+        return "Following"
+      }
+    } else {
+      return "Follow"
+    }
+  })
+
+  useEffect(() => {
+    if (user) {
+      if (user.following.includes(uid))
+        setFollowingState(FOLLOWING_STATES.FOLLOWING)
+    } else {
+      setFollowingState(FOLLOWING_STATES.NOT_FOLLOWING)
+    }
+  }, [user])
 
   const parsedCreationDate = useDateTimeFormat(creationDate, "en-EN", {
     month: "long",
@@ -55,6 +97,16 @@ export default function User({
   useEffect(() => {
     fetchLatestUserDevits(uid).then(setUserTimeline)
   }, [])
+
+  const handleClick = async (followedUserUid, followerUserUid) => {
+    if (followingState === FOLLOWING_STATES.NOT_FOLLOWING) {
+      await followUser(followedUserUid, followerUserUid)
+      setFollowingState(FOLLOWING_STATES.FOLLOWING)
+    } else {
+      await unfollowUser(followedUserUid, followerUserUid)
+      setFollowingState(FOLLOWING_STATES.NOT_FOLLOWING)
+    }
+  }
 
   return (
     <>
@@ -84,7 +136,22 @@ export default function User({
               <div className="picture-container">
                 <img className="picture" src={avatar} />
               </div>
-              <SumbitButton>Follow</SumbitButton>
+              <div
+                onMouseEnter={() => setButtonHover(true)}
+                onMouseLeave={() => setButtonHover(false)}
+              >
+                <ActionButton
+                  disabled={isButtonDisabled}
+                  onClick={() => handleClick(uid, user.uid)}
+                  styletype={
+                    followingState === FOLLOWING_STATES.FOLLOWING
+                      ? "outline"
+                      : "fill"
+                  }
+                >
+                  {followButtonValue}
+                </ActionButton>
+              </div>
             </div>
             <div className="names-container">
               <span className="display-name">{displayName}</span>
@@ -103,11 +170,11 @@ export default function User({
             </div>
             <div className="social-stats">
               <div className="social-stat-container">
-                <span className="social-stat">{following.length}</span>
+                <span className="social-stat">{followingCount}</span>
                 <span className="social-stat-name">Following</span>
               </div>
               <div className="social-stat-container">
-                <span className="social-stat">{followers.length}</span>
+                <span className="social-stat">{followersCount}</span>
                 <span className="social-stat-name">Followers</span>
               </div>
             </div>

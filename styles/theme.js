@@ -14,7 +14,7 @@ export const colors = {
   gray: "#536471",
   dimmedGray: "#eff3f4",
   error: "#f91880",
-  red: "#f91880",
+  red: "#f4212e",
   warning: "#FFAD1F",
   green: "#00ba7c",
   skeleton: "#edecec",

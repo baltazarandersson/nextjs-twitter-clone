@@ -10,12 +10,12 @@ export default function StringCounter({ characters = 0, maxLength = 280 }) {
 
   let primaryColor = progress >= 93 ? colors.warning : colors.primary
   const secondaryColor = "#eff3f4"
-  const textColor = progress >= 100 ? colors.error : colors.warning
+  const textColor = progress >= 100 ? colors.red : colors.warning
   const stroke = 2
   const size = 32
 
   if (progress >= 100) {
-    primaryColor = colors.error
+    primaryColor = colors.red
   }
 
   // const size = radius * 2;

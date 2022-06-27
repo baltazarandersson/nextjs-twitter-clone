@@ -8,7 +8,12 @@ import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import { useEffect, useState } from "react"
 
-export default function DevitInteractions({ id, userUid }) {
+export default function DevitInteractions({
+  id,
+  userUid,
+  size = 18,
+  justify = "space-between",
+}) {
   const [devit, setDevit] = useState()
 
   useEffect(() => {
@@ -27,54 +32,62 @@ export default function DevitInteractions({ id, userUid }) {
   return (
     <>
       {devit && (
-        <div>
-          <InteractButton
-            color={colors.gray}
-            size={18}
-            hoverColor={colors.primary}
-            hoverBgColor={addOpacityToColor(colors.primary, 0.1)}
-            title="Comment"
-            count={devit.commentsCount}
-          >
-            <Comment width={18} height={18} color={colors.gray} />
-          </InteractButton>
-          <InteractButton
-            color={colors.gray}
-            size={18}
-            hoverColor={colors.green}
-            hoverBgColor={addOpacityToColor(colors.green, 0.1)}
-            title="Revit"
-          >
-            <Revit width={18} height={18} color={colors.gray} />
-          </InteractButton>
-          <InteractButton
-            color={devit.likedBy.includes(userUid) ? colors.red : colors.gray}
-            size={18}
-            hoverColor={colors.red}
-            hoverBgColor={addOpacityToColor(colors.red, 0.1)}
-            title="Like"
-            count={devit.likedBy.length}
-            onClick={() => handleToggleLike()}
-          >
-            <Like width={18} height={18} color={colors.gray} />
-          </InteractButton>
-          <InteractButton
-            color={colors.gray}
-            size={18}
-            hoverColor={colors.secondary}
-            hoverBgColor={addOpacityToColor(colors.secondary, 0.1)}
-            title="Share"
-            count={devit.shares}
-          >
-            <Share width={18} height={18} color={colors.gray} />
-          </InteractButton>
-        </div>
+        <section>
+          <div onClick={(e) => e.stopPropagation()}>
+            <InteractButton
+              color={colors.gray}
+              size={size}
+              hoverColor={colors.primary}
+              hoverBgColor={addOpacityToColor(colors.primary, 0.1)}
+              title="Comment"
+              count={devit.commentsCount}
+            >
+              <Comment width={size} height={size} color={colors.gray} />
+            </InteractButton>
+          </div>
+          <div onClick={(e) => e.stopPropagation()}>
+            <InteractButton
+              color={colors.gray}
+              size={size}
+              hoverColor={colors.green}
+              hoverBgColor={addOpacityToColor(colors.green, 0.1)}
+              title="Revit"
+            >
+              <Revit width={size} height={size} color={colors.gray} />
+            </InteractButton>
+          </div>
+          <div onClick={(e) => e.stopPropagation()}>
+            <InteractButton
+              color={devit.likedBy.includes(userUid) ? colors.red : colors.gray}
+              size={size}
+              hoverColor={colors.red}
+              hoverBgColor={addOpacityToColor(colors.red, 0.1)}
+              title="Like"
+              count={devit.likedBy.length}
+              onClick={() => handleToggleLike()}
+            >
+              <Like width={size} height={size} color={colors.gray} />
+            </InteractButton>
+          </div>
+          <div onClick={(e) => e.stopPropagation()}>
+            <InteractButton
+              color={colors.gray}
+              size={size}
+              hoverColor={colors.secondary}
+              hoverBgColor={addOpacityToColor(colors.secondary, 0.1)}
+              title="Share"
+              count={devit.shares}
+            >
+              <Share width={size} height={size} color={colors.gray} />
+            </InteractButton>
+          </div>
+        </section>
       )}
       <style jsx>{`
-        div {
+        section {
           width: 100%;
           display: flex;
-          justify-content: space-between;
+          justify-content: ${justify};
         }
       `}</style>
     </>

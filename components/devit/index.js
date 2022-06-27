@@ -72,10 +72,7 @@ export default function Devit({
             <p className="devit-content">{content}</p>
             {img && <img src={img} />}
             <div>
-              <section
-                className="interactions-container"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <section className="interactions-container">
                 <DevitInteractions
                   likedBy={likedBy}
                   commentsCount={commentsCount}

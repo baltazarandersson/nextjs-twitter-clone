@@ -13,8 +13,8 @@ export default function Comment({
   createdAt,
   displayName,
   userName,
-  likedBy,
   content,
+  img,
 }) {
   const timeAgo = useTimeAgo(createdAt)
   const createdAtFormated = useDateTimeFormat(createdAt)
@@ -51,7 +51,7 @@ export default function Comment({
           </div>
           <div className="devit-content">
             <p>{content}</p>
-            {/* {img && <img src={img} />} */}
+            {img && <img src={img} />}
             <section className="interactions-container">
               <InteractButton
                 size={18}

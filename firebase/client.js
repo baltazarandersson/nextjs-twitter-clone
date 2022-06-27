@@ -16,6 +16,7 @@ import {
   Timestamp,
   updateDoc,
   where,
+  writeBatch,
 } from "firebase/firestore"
 import {
   getAuth,
@@ -91,8 +92,9 @@ export const createNewUser = async (firebaseUser) => {
     location,
     creationDate: Timestamp.fromDate(new Date()),
     followers: [],
+    followersCount: 0,
     following: [],
-    likes: [],
+    followingCount: 0,
     devits: [],
   }
   return await setDoc(doc(database, "users", `${uid}`), newUser)
@@ -108,10 +110,11 @@ export const getUserInfoByUid = (uid) => {
 export const loginWithGithub = () => {
   const gitProvider = new GithubAuthProvider()
   return signInWithPopup(auth, gitProvider).then((user) => {
-    const userInfo = getAdditionalUserInfo(user)
-    if (!userInfo.isNewUser) {
-      createNewUser(user)
-    }
+    // const userInfo = getAdditionalUserInfo(user)
+    // if (!userInfo.isNewUser) {
+    //   createNewUser(user)
+    // }
+    createNewUser(user)
     const data = mapUserFromFirebaseAuthToUser(user)
     return data
   })
@@ -252,4 +255,40 @@ export const listenToDevitChanges = (devitId, callback) => {
     callback(data)
   })
   return unsub
+}
+
+export const followUser = async (followedUserUid, followerUserUid) => {
+  const batch = writeBatch(database)
+
+  const followedUserRef = doc(database, "users", `${followedUserUid}`)
+  batch.update(followedUserRef, {
+    followersCount: increment(1),
+    followers: arrayUnion(followerUserUid),
+  })
+
+  const followerUserRef = doc(database, "users", followerUserUid)
+  batch.update(followerUserRef, {
+    followingCount: increment(1),
+    following: arrayUnion(followedUserUid),
+  })
+
+  await batch.commit()
+}
+
+export const unfollowUser = async (followedUserUid, followerUserUid) => {
+  const batch = writeBatch(database)
+
+  const followedUserRef = doc(database, "users", `${followedUserUid}`)
+  batch.update(followedUserRef, {
+    followersCount: increment(-1),
+    followers: arrayRemove(followerUserUid),
+  })
+
+  const followerUserRef = doc(database, "users", followerUserUid)
+  batch.update(followerUserRef, {
+    followingCount: increment(-1),
+    following: arrayRemove(followedUserUid),
+  })
+
+  await batch.commit()
 }
