@@ -15,6 +15,9 @@ import BackButton from "@components/Buttons/BackButton"
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import StringCounter from "@components/StringCounter"
+import useAlert from "@hooks/useAlert"
+import { ALERT_TYPES } from "@pages/Alert"
+import { AlertPortal } from "@components/Alert"
 
 const COMPOSE_STATES = {
   USER_NOT_KNOWN: 0,
@@ -39,6 +42,7 @@ const ComposeDevit = ({ user }) => {
   const [imgURL, setImgURL] = useState(null)
   const [uploadProgress, setUploadProgress] = useState(0)
 
+  const { shownAlert, createNewAlert } = useAlert()
   const router = useRouter()
 
   const contentValue = useMemo(() => {
@@ -110,13 +114,17 @@ const ComposeDevit = ({ user }) => {
   const handleDrop = (e) => {
     e.preventDefault()
     try {
-      console.log(e)
       setDrag(DRAG_IMAGES_STATES.NONE)
       const file = e.dataTransfer.files[0]
 
       const uploadTask = uploadImage(file)
       setTask(uploadTask)
     } catch (error) {
+      createNewAlert({
+        type: ALERT_TYPES.ERROR,
+        title: "Error",
+        message: "Invalid file format",
+      })
       setStatus(COMPOSE_STATES.ERROR)
     }
   }
@@ -191,6 +199,7 @@ const ComposeDevit = ({ user }) => {
           </form>
         </div>
       </section>
+      {shownAlert && <AlertPortal {...shownAlert} />}
       <style jsx>{`
         .compose-main-container {
           display: flex;
@@ -325,7 +334,7 @@ const ComposeDevit = ({ user }) => {
         }
 
         .textarea-back--exceded-characters {
-          background: ${addOpacityToColor(colors.error, 0.4)};
+          background: ${addOpacityToColor(colors.error, 0.3)};
         }
       `}</style>
     </>

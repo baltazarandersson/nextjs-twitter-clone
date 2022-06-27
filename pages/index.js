@@ -11,13 +11,23 @@ import GitHub from "@components/Icons/GitHub"
 
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
+import useAlert, { ALERT_TYPES } from "@hooks/useAlert"
+import { AlertPortal } from "@components/Alert"
 
 export default function HomePage() {
   const user = useUser()
   const router = useRouter()
 
+  const { shownAlert, createNewAlert } = useAlert()
+
   const handleClick = () => {
-    loginWithGithub()
+    loginWithGithub().catch(() => {
+      createNewAlert({
+        type: ALERT_TYPES.ERROR,
+        title: "Error",
+        message: "Exception during login",
+      })
+    })
   }
 
   useEffect(() => {
@@ -51,6 +61,7 @@ export default function HomePage() {
           {user === USER_STATES.NOT_KNOWN && <Loader />}
         </div>
       </section>
+      {shownAlert && <AlertPortal {...shownAlert} />}
 
       <style jsx>{`
         .auth-status-container {

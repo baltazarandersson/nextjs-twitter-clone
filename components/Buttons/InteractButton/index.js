@@ -10,10 +10,15 @@ export default function InteractButton({
   size = 34,
   color = colors.gray,
   count,
+  disabled = false,
 }) {
   return (
     <>
-      <section onClick={() => onClick && onClick()} title={title}>
+      <section
+        onClick={() => onClick && onClick()}
+        title={title}
+        disabled={disabled}
+      >
         <span>{count}</span>
         <div />
         {children}
@@ -58,6 +63,16 @@ export default function InteractButton({
         section:hover :global(svg) {
           color: ${hoverColor};
         }
+        section[disabled] > div:hover {
+          background: none;
+        }
+        section[disabled]:hover {
+          color: ${color};
+        }
+        section[disabled]:hover :global(svg) {
+          color: ${color};
+        }
+        section
       `}</style>
     </>
   )

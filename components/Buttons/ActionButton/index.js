@@ -33,7 +33,7 @@ export default function ActionButton({
           opacity: 0.85;
         }
         button[disabled] {
-          cursor: auto;
+          cursor: not-allowed;
           opacity: 0.4;
         }
         button > :global(svg) {

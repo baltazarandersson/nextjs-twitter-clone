@@ -105,20 +105,16 @@ export const getUserInfoByUid = (uid) => {
   })
 }
 
-export const loginWithGithub = async () => {
+export const loginWithGithub = () => {
   const gitProvider = new GithubAuthProvider()
-  return await signInWithPopup(auth, gitProvider)
-    .then((user) => {
-      const userInfo = getAdditionalUserInfo(user)
-      if (!userInfo.isNewUser) {
-        createNewUser(user)
-      }
-      const data = mapUserFromFirebaseAuthToUser(user)
-      return data
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+  return signInWithPopup(auth, gitProvider).then((user) => {
+    const userInfo = getAdditionalUserInfo(user)
+    if (!userInfo.isNewUser) {
+      createNewUser(user)
+    }
+    const data = mapUserFromFirebaseAuthToUser(user)
+    return data
+  })
 }
 
 export const addCommentToDevit = async (commentData, devitId) => {
@@ -253,7 +249,6 @@ export const listenToDevitChanges = (devitId, callback) => {
   const devitDocRef = doc(database, "devits", `${devitId}`)
   const unsub = onSnapshot(devitDocRef, (devit) => {
     const data = devit.data()
-    console.log(data)
     callback(data)
   })
   return unsub

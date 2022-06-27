@@ -4,12 +4,11 @@ import { listenLatestDevits } from "@firebase/client"
 
 import AppLayout from "@components/Layout/AppLayout"
 import Avatar from "@components/Avatar"
-import Devit from "@components/Devit"
-import { Loader } from "@components/Loader"
 
 import { breakpoints } from "@styles/theme"
 import Header from "@components/Layout/AppLayout/Header"
 import { withAuth } from "@components/helpers/withAuth"
+import Timeline from "@containers/Timeline"
 
 const HomePage = ({ user }) => {
   const [timeline, setTimeline] = useState(undefined)
@@ -39,44 +38,7 @@ const HomePage = ({ user }) => {
           <h1>Home</h1>
         </Header>
         <section>
-          {timeline !== undefined ? (
-            timeline.map(
-              ({
-                id,
-                userUid,
-                avatar,
-                displayName,
-                userName,
-                createdAt,
-                content,
-                commentsCount,
-                shares,
-                likedBy,
-                img,
-              }) => {
-                return (
-                  <Devit
-                    key={id}
-                    id={id}
-                    userUid={userUid}
-                    avatar={avatar}
-                    displayName={displayName}
-                    userName={userName}
-                    createdAt={createdAt}
-                    content={content}
-                    commentsCount={commentsCount}
-                    shares={shares}
-                    likedBy={likedBy}
-                    img={img}
-                  />
-                )
-              }
-            )
-          ) : (
-            <div className="loader-container">
-              <Loader size={32} />
-            </div>
-          )}
+          <Timeline devitList={timeline} />
         </section>
       </AppLayout>
       <style jsx>{`

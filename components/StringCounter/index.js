@@ -8,9 +8,9 @@ export default function StringCounter({ characters = 0, maxLength = 280 }) {
 
   const compensation = progress >= 93 ? 2 : 10
 
-  let primaryColor = progress >= 93 ? "#FFAD1F" : colors.primary
+  let primaryColor = progress >= 93 ? colors.warning : colors.primary
   const secondaryColor = "#eff3f4"
-  const textColor = progress >= 100 ? colors.error : "#FFAD1F"
+  const textColor = progress >= 100 ? colors.error : colors.warning
   const stroke = 2
   const size = 32
 

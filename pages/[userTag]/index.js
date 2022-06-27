@@ -7,14 +7,13 @@ import Header from "@components/Layout/AppLayout/Header"
 import Location from "@components/Icons/Location"
 import Calendar from "@components/Icons/Calendar"
 import { fetchLatestUserDevits } from "@firebase/client"
-import Devit from "@components/Devit"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import ArrowLeft from "@components/Icons/ArrowLeft"
-import { Loader } from "@components/Loader"
 import BackButton from "@components/Buttons/BackButton"
 
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
+import Timeline from "@containers/Timeline"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -47,6 +46,7 @@ export default function User({
   devits,
 }) {
   const [userTimeLine, setUserTimeline] = useState(undefined)
+
   const parsedCreationDate = useDateTimeFormat(creationDate, "en-EN", {
     month: "long",
     year: "numeric",
@@ -113,44 +113,7 @@ export default function User({
             </div>
           </section>
           <section className="timeline-container">
-            {userTimeLine !== undefined ? (
-              userTimeLine?.map(
-                ({
-                  id,
-                  userUid,
-                  avatar,
-                  displayName,
-                  userName,
-                  createdAt,
-                  content,
-                  commentsCount,
-                  shares,
-                  likedBy,
-                  img,
-                }) => {
-                  return (
-                    <Devit
-                      key={id}
-                      id={id}
-                      userUid={userUid}
-                      avatar={avatar}
-                      displayName={displayName}
-                      userName={userName}
-                      createdAt={createdAt}
-                      content={content}
-                      commentsCount={commentsCount}
-                      shares={shares}
-                      likedBy={likedBy}
-                      img={img}
-                    />
-                  )
-                }
-              )
-            ) : (
-              <div className="loader-container">
-                <Loader size={32} />
-              </div>
-            )}
+            <Timeline devitList={userTimeLine} />
           </section>
         </section>
       </AppLayout>
@@ -190,6 +153,7 @@ export default function User({
           display: flex;
           flex-direction: column;
           align-items: stretch;
+          border-bottom: 1px solid ${colors.dimmedGray};
         }
         .account-header-info {
           display: flex;
@@ -254,13 +218,13 @@ export default function User({
         }
         .social-stat-container {
           display: flex;
+          align-items: baseline;
           gap: 4px;
           margin-right: 20px;
           font-size: 15px;
         }
         .social-stat {
           font-family: ${fonts.secondary};
-          line-height: 24px;
         }
         .social-stat-name {
           color: ${colors.gray};
