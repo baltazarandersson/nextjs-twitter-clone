@@ -1,15 +1,14 @@
 import Head from "next/head"
-import { addDevit } from "@firebase/client"
-
 import { useRouter } from "next/router"
+import { addDevit } from "@firebase/client"
 
 import ArrowLeft from "@components/Icons/ArrowLeft"
 import { withAuth } from "@components/helpers/withAuth"
 import BackButton from "@components/Buttons/BackButton"
-
-import { colors } from "@styles/theme"
-import { addOpacityToColor } from "@styles/utils"
 import TextComposer from "@components/TextComposer"
+
+import { addOpacityToColor } from "@styles/utils"
+import { colors } from "@styles/theme"
 
 const ComposeDevit = ({ user }) => {
   const router = useRouter()

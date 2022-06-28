@@ -1,9 +1,11 @@
+import { addCommentToDevit } from "@firebase/client"
+import ReactDOM from "react-dom"
+
+import { useUser } from "@context/UserContext"
 import Devit from "@components/Devit"
 import TextComposer from "@components/TextComposer"
-import { useUser } from "@context/UserContext"
-import { addCommentToDevit } from "@firebase/client"
+
 import { colors } from "@styles/theme"
-import ReactDOM from "react-dom"
 
 function Reply({ devit, hiddeModal }) {
   const user = useUser()
@@ -52,7 +54,7 @@ function Reply({ devit, hiddeModal }) {
           bottom: 0;
           left: 0;
           right: 0;
-          backdrop-filter: brightness(80%) blur(2px);
+          backdrop-filter: brightness(70%) blur(0.5px);
           z-index: 1;
         }
         section {

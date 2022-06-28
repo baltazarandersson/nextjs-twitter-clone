@@ -1,6 +1,7 @@
+import ReactDOM from "react-dom"
+
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import ReactDOM from "react-dom"
 
 export const TYPE_COLOR = {
   0: colors.red,

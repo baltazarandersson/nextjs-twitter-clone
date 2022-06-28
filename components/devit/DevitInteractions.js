@@ -1,3 +1,6 @@
+import { likeDevit, listenToDevitChanges, unlikeDevit } from "@firebase/client"
+import { useEffect, useState } from "react"
+
 import InteractButton from "@components/Buttons/InteractButton"
 import Comment from "@components/Icons/Comment"
 import Like from "@components/Icons/Like"
@@ -5,10 +8,9 @@ import LikeFill from "@components/Icons/LikeFill"
 import Revit from "@components/Icons/Revit"
 import Share from "@components/Icons/Share"
 import { ReplyModal } from "@components/Modals/ReplyModal"
-import { likeDevit, listenToDevitChanges, unlikeDevit } from "@firebase/client"
-import { colors } from "@styles/theme"
+
 import { addOpacityToColor } from "@styles/utils"
-import { useEffect, useState } from "react"
+import { colors } from "@styles/theme"
 
 export default function DevitInteractions({
   id,

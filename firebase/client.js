@@ -110,10 +110,10 @@ export const getUserInfoByUid = (uid) => {
 export const loginWithGithub = () => {
   const gitProvider = new GithubAuthProvider()
   return signInWithPopup(auth, gitProvider).then((user) => {
-    // const userInfo = getAdditionalUserInfo(user)
-    // if (!userInfo.isNewUser) {
-    //   createNewUser(user)
-    // }
+    const userInfo = getAdditionalUserInfo(user)
+    if (userInfo.isNewUser) {
+      createNewUser(user)
+    }
     createNewUser(user)
     const data = mapUserFromFirebaseAuthToUser(user)
     return data

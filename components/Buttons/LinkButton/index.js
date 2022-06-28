@@ -1,6 +1,7 @@
+import Link from "next/link"
+
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import Link from "next/link"
 
 export default function LinkButton({
   children,
@@ -23,7 +24,7 @@ export default function LinkButton({
           width: ${size}px;
           height: ${size}px;
         }
-        a > div {
+        div {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -33,10 +34,10 @@ export default function LinkButton({
           border-radius: 9999px;
           transition: background 0.2s ease;
         }
-        a > div > :global(svg) {
+        div > :global(svg) {
           display: block;
         }
-        a > div:hover {
+        div:hover {
           background: ${hoverColor};
         }
       `}</style>

@@ -4,11 +4,11 @@ import { listenLatestDevits } from "@firebase/client"
 
 import AppLayout from "@components/Layout/AppLayout"
 import Avatar from "@components/Avatar"
-
-import { breakpoints } from "@styles/theme"
 import Header from "@components/Layout/AppLayout/Header"
 import { withAuth } from "@components/helpers/withAuth"
 import Timeline from "@containers/Timeline"
+
+import { breakpoints } from "@styles/theme"
 
 const HomePage = ({ user }) => {
   const [timeline, setTimeline] = useState(undefined)

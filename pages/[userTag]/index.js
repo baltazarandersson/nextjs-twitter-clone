@@ -1,24 +1,24 @@
 import { useEffect, useMemo, useState } from "react"
 import Head from "next/head"
-
-import ActionButton from "@components/Buttons/ActionButton"
-import AppLayout from "@components/Layout/AppLayout"
-import Header from "@components/Layout/AppLayout/Header"
-import Location from "@components/Icons/Location"
-import Calendar from "@components/Icons/Calendar"
 import {
   fetchLatestUserDevits,
   followUser,
   unfollowUser,
 } from "@firebase/client"
+
+import { useUser } from "@context/UserContext"
+import Timeline from "@containers/Timeline"
+import ActionButton from "@components/Buttons/ActionButton"
+import AppLayout from "@components/Layout/AppLayout"
+import Header from "@components/Layout/AppLayout/Header"
+import Location from "@components/Icons/Location"
+import Calendar from "@components/Icons/Calendar"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import ArrowLeft from "@components/Icons/ArrowLeft"
 import BackButton from "@components/Buttons/BackButton"
 
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import Timeline from "@containers/Timeline"
-import { useUser } from "@context/UserContext"
 
 export async function getServerSideProps(context) {
   const { query } = context

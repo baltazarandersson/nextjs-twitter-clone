@@ -7,12 +7,12 @@ import Logo from "@components/Icons/Logo"
 import { Loader } from "@components/Loader"
 import ActionButton from "@components/Buttons/ActionButton"
 import GitHub from "@components/Icons/GitHub"
-
-import { colors, fonts } from "@styles/theme"
-import { addOpacityToColor } from "@styles/utils"
 import useAlert, { ALERT_TYPES } from "@hooks/useAlert"
 import { AlertPortal } from "@components/Alert"
 import { USER_STATES, useUser } from "@context/UserContext"
+
+import { colors, fonts } from "@styles/theme"
+import { addOpacityToColor } from "@styles/utils"
 
 export default function HomePage() {
   const user = useUser()

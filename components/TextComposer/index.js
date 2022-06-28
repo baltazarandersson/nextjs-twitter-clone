@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { getFileURL, uploadImage } from "@firebase/client"
 
+import { useUser } from "@context/UserContext"
 import { AlertPortal } from "@components/Alert"
 import Avatar from "@components/Avatar"
 import ActionButton from "@components/Buttons/ActionButton"
@@ -12,7 +13,6 @@ import useAlert, { ALERT_TYPES } from "@hooks/useAlert"
 
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import { useUser } from "@context/UserContext"
 
 const DRAG_IMAGES_STATES = {
   ERROR: -1,

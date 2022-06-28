@@ -1,6 +1,6 @@
-import { Loader } from "@components/Loader"
-import { USER_STATES, useUser } from "@context/UserContext"
 import { useRouter } from "next/router"
+import { USER_STATES, useUser } from "@context/UserContext"
+import { Loader } from "@components/Loader"
 
 export const withAuth = (WrappedComponent) => {
   const AuthenticatedComponent = () => {

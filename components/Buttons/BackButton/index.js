@@ -1,6 +1,7 @@
+import { useRouter } from "next/router"
+
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import { useRouter } from "next/router"
 
 export default function BackButton({
   children,

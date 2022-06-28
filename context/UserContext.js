@@ -12,7 +12,6 @@ export const useUser = () => useContext(UserContext)
 
 const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(USER_STATES.NOT_KNOWN)
-  console.log(user)
 
   useEffect(() => {
     const unsub = onAuthChange(setUser)

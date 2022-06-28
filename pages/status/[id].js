@@ -1,20 +1,22 @@
+import Head from "next/head"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import { addCommentToDevit, listenLatestDevitComments } from "@firebase/client"
+
+import { useUser } from "@context/UserContext"
+import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import Avatar from "@components/Avatar"
 import BackButton from "@components/Buttons/BackButton"
-import CommentsList from "@components/CommentsList"
+import RepliesList from "@containers/RepliesList"
 import DevitInteractions from "@components/Devit/DevitInteractions"
 import ArrowLeft from "@components/Icons/ArrowLeft"
 import AppLayout from "@components/Layout/AppLayout"
 import Header from "@components/Layout/AppLayout/Header"
 import TextComposer from "@components/TextComposer"
 import TextSeparator from "@components/TextSeparator"
-import { useUser } from "@context/UserContext"
-import { addCommentToDevit, listenLatestDevitComments } from "@firebase/client"
-import useDateTimeFormat from "@hooks/useDateTimeFormat"
+
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import Head from "next/head"
-import Link from "next/link"
-import { useEffect, useState } from "react"
 
 export async function getServerSideProps(context) {
   const { query } = context
@@ -160,7 +162,7 @@ export default function DevitPage({
             </section>
           </>
         )}
-        <CommentsList list={devitComments} />
+        <RepliesList list={devitComments} />
       </AppLayout>
       <style jsx>{`
         h1 {

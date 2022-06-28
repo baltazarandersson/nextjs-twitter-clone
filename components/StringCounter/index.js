@@ -1,5 +1,6 @@
-import { colors } from "@styles/theme"
 import { useEffect, useState } from "react"
+
+import { colors } from "@styles/theme"
 
 export default function StringCounter({ characters = 0, maxLength = 280 }) {
   const [resCharacters, setResCharacters] = useState(null)

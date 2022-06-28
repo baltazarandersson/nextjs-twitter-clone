@@ -1,11 +1,12 @@
-import Avatar from "@components/Avatar"
-
-import TextSeparator from "@components/TextSeparator"
-import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import { useRouter } from "next/router"
 import Link from "next/link"
+
+import Avatar from "@components/Avatar"
+import TextSeparator from "@components/TextSeparator"
+import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import useTimeAgo from "@hooks/useTimeAgo"
 import DevitInteractions from "./DevitInteractions"
+
 import { colors } from "@styles/theme"
 
 export default function Devit({ devit, showInteractions = true }) {
