@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { addReplyToDevit, listenLatestDevitComments } from "@firebase/client"
+import { addReplyToDevit, listenLatestDevitReplies } from "@firebase/client"
 
 import { useUser } from "@context/UserContext"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
@@ -44,7 +44,7 @@ export default function DevitPage({
   content,
   userUid,
   likedBy,
-  commentsCount,
+  repliesCount,
   shares,
   createdAt,
   img,
@@ -56,11 +56,11 @@ export default function DevitPage({
     day: "numeric",
     year: "numeric",
   })
-  const [devitComments, setDevitComments] = useState([])
+  const [devitReplies, setDevitReplies] = useState([])
   const user = useUser()
 
   useEffect(() => {
-    const unsub = listenLatestDevitComments(id, setDevitComments)
+    const unsub = listenLatestDevitReplies(id, setDevitReplies)
     return () => unsub()
   }, [])
 
@@ -144,7 +144,7 @@ export default function DevitPage({
             <section className="interactions-container">
               <DevitInteractions
                 likedBy={likedBy}
-                commentsCount={commentsCount}
+                repliesCount={repliesCount}
                 shares={shares}
                 id={id}
                 userUid={userUid}
@@ -162,7 +162,7 @@ export default function DevitPage({
             </section>
           </>
         )}
-        <RepliesList list={devitComments} />
+        <RepliesList list={devitReplies} />
       </AppLayout>
       <style jsx>{`
         h1 {

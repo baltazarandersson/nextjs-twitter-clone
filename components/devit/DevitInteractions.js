@@ -1,8 +1,8 @@
 import { likeDevit, listenToDevitChanges, unlikeDevit } from "@firebase/client"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import InteractButton from "@components/Buttons/InteractButton"
-import Comment from "@components/Icons/Comment"
+import Reply from "@components/Icons/Reply"
 import Like from "@components/Icons/Like"
 import LikeFill from "@components/Icons/LikeFill"
 import Revit from "@components/Icons/Revit"
@@ -11,15 +11,20 @@ import { ReplyModal } from "@components/Modals/ReplyModal"
 
 import { addOpacityToColor } from "@styles/utils"
 import { colors } from "@styles/theme"
+import { useUser } from "@context/UserContext"
 
 export default function DevitInteractions({
   id,
-  userUid,
   size = 18,
   justify = "space-between",
 }) {
   const [devit, setDevit] = useState()
   const [isReplyModalShown, setReplyModal] = useState(false)
+  const user = useUser()
+
+  const isDevitLikedByUser = useMemo(() => {
+    return user.devitsLiked.includes(id)
+  }, [user])
 
   useEffect(() => {
     const unsub = listenToDevitChanges(id, setDevit)
@@ -27,14 +32,14 @@ export default function DevitInteractions({
   }, [])
 
   const handleToggleLike = () => {
-    if (!devit.likedBy.includes(userUid)) {
-      likeDevit(id, userUid)
+    if (isDevitLikedByUser) {
+      unlikeDevit(id, user.uid)
     } else {
-      unlikeDevit(id, userUid)
+      likeDevit(id, user.uid)
     }
   }
 
-  const handleComment = () => {
+  const handleReply = () => {
     setReplyModal(true)
   }
 
@@ -52,11 +57,11 @@ export default function DevitInteractions({
               size={size}
               hoverColor={colors.primary}
               hoverBgColor={addOpacityToColor(colors.primary, 0.1)}
-              title="Comment"
-              count={devit.commentsCount}
-              onClick={() => handleComment()}
+              title="Reply"
+              count={devit.repliesCount}
+              onClick={() => handleReply()}
             >
-              <Comment width={size} height={size} />
+              <Reply width={size} height={size} />
             </InteractButton>
           </div>
           <div onClick={(e) => e.stopPropagation()}>
@@ -72,17 +77,15 @@ export default function DevitInteractions({
           </div>
           <div onClick={(e) => e.stopPropagation()}>
             <InteractButton
-              color={
-                devit.likedBy.includes(userUid) ? colors.fuxia : colors.gray
-              }
+              color={isDevitLikedByUser ? colors.fuxia : colors.gray}
               size={size}
               hoverColor={colors.fuxia}
               hoverBgColor={addOpacityToColor(colors.fuxia, 0.1)}
               title="Like"
-              count={devit.likedBy.length}
+              count={devit.likesCount}
               onClick={() => handleToggleLike()}
             >
-              {devit.likedBy.includes(userUid) ? (
+              {isDevitLikedByUser ? (
                 <LikeFill width={size} height={size} />
               ) : (
                 <Like width={size} height={size} />

@@ -1,5 +1,5 @@
 import InteractButton from "@components/Buttons/InteractButton"
-import Comment from "@components/Icons/Comment"
+import Reply from "@components/Icons/Reply"
 import Like from "@components/Icons/Like"
 import Revit from "@components/Icons/Revit"
 import Share from "@components/Icons/Share"
@@ -30,7 +30,7 @@ export default function DevitSkeleton() {
                   size={18}
                   disabled
                 >
-                  <Comment
+                  <Reply
                     width={18}
                     height={18}
                     color={addOpacityToColor(colors.gray, 0.2)}

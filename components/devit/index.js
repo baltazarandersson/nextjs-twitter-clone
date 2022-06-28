@@ -12,13 +12,12 @@ import { colors } from "@styles/theme"
 export default function Devit({ devit, showInteractions = true }) {
   const {
     id,
-    userUid,
     avatar,
     displayName,
     userName,
     createdAt,
     content,
-    commentsCount,
+    repliesCount,
     shares,
     likedBy,
     img,
@@ -77,10 +76,9 @@ export default function Devit({ devit, showInteractions = true }) {
                 <section className="interactions-container">
                   <DevitInteractions
                     likedBy={likedBy}
-                    commentsCount={commentsCount}
+                    repliesCount={repliesCount}
                     shares={shares}
                     id={id}
-                    userUid={userUid}
                   />
                 </section>
               )}

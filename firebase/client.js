@@ -65,11 +65,20 @@ const mapUserFromFirebaseAuthToUser = (userInfo) => {
   }
 }
 
+export const listenUserChanges = (uid, callback) => {
+  const userRef = doc(database, "users", `${uid}`)
+  const unsub = onSnapshot(userRef, (snapshot) => {
+    const newUserData = snapshot.data()
+    callback(newUserData)
+  })
+  return unsub
+}
+
 export const onAuthChange = (onChange) => {
   const unsuscribe = onAuthStateChanged(auth, (userCredentials) => {
     if (userCredentials) {
       const { uid } = userCredentials
-      getUserInfoByUid(uid).then(onChange)
+      listenUserChanges(uid, onChange)
     } else {
       onChange(null)
     }
@@ -95,6 +104,7 @@ export const createNewUser = async (firebaseUser) => {
     followersCount: 0,
     following: [],
     followingCount: 0,
+    devitsLiked: [],
     devits: [],
   }
   return await setDoc(doc(database, "users", `${uid}`), newUser)
@@ -129,7 +139,7 @@ export const addReplyToDevit = async (replyData, devitId) => {
     "replies"
   )
 
-  updateDoc(doc(database, devitRef), {
+  updateDoc(devitRef, {
     repliesCount: increment(1),
   })
 
@@ -152,7 +162,7 @@ export const addDevit = async ({
     const devitsCollectionRef = collection(database, "devits")
     const userRef = doc(database, "users", `${userUid}`)
 
-    const newDevitRef = await addDoc(devitsCollectionRef, {
+    const newDevit = await addDoc(devitsCollectionRef, {
       avatar,
       content,
       userUid,
@@ -160,11 +170,12 @@ export const addDevit = async ({
       userName,
       createdAt: Timestamp.fromDate(new Date()),
       likedBy: [],
+      likesCount: 0,
       repliesCount: 0,
       shares: [],
       img,
     })
-    const devitId = newDevitRef.id
+    const devitId = newDevit.id
 
     return updateDoc(userRef, {
       devits: arrayUnion(devitId),
@@ -185,12 +196,12 @@ const mapDevtisFromFirebaseToDevitObject = (devitDoc) => {
   }
 }
 
-export const listenLatestDevitComments = (devitId, callback) => {
-  const commentsQuery = query(
-    collection(database, "devits", `${devitId}`, "comments"),
+export const listenLatestDevitReplies = (devitId, callback) => {
+  const repliesQuery = query(
+    collection(database, "devits", `${devitId}`, "replies"),
     orderBy("createdAt", "desc")
   )
-  const unsub = onSnapshot(commentsQuery, (snapshot) => {
+  const unsub = onSnapshot(repliesQuery, (snapshot) => {
     const data = snapshot.docs.map(mapDevtisFromFirebaseToDevitObject)
     callback(data)
   })
@@ -237,20 +248,38 @@ export const getFileURL = (uploadTask, settter) => {
   })
 }
 
-export const likeDevit = (devitId, userUid) => {
-  const devitDocRef = doc(database, "devits", `${devitId}`)
+export const likeDevit = async (devitId, userUid) => {
+  const batch = writeBatch(database)
 
-  updateDoc(devitDocRef, {
+  const devitDocRef = doc(database, "devits", `${devitId}`)
+  batch.update(devitDocRef, {
     likedBy: arrayUnion(userUid),
+    likesCount: increment(1),
   })
+
+  const userDocRef = doc(database, "users", `${userUid}`)
+  batch.update(userDocRef, {
+    devitsLiked: arrayUnion(devitId),
+  })
+
+  batch.commit()
 }
 
 export const unlikeDevit = (devitId, userUid) => {
-  const devitDocRef = doc(database, "devits", `${devitId}`)
+  const batch = writeBatch(database)
 
-  updateDoc(devitDocRef, {
+  const devitDocRef = doc(database, "devits", `${devitId}`)
+  batch.update(devitDocRef, {
     likedBy: arrayRemove(userUid),
+    likesCount: increment(-1),
   })
+
+  const userDocRef = doc(database, "users", `${userUid}`)
+  batch.update(userDocRef, {
+    devitsLiked: arrayRemove(devitId),
+  })
+
+  batch.commit()
 }
 
 export const listenToDevitChanges = (devitId, callback) => {

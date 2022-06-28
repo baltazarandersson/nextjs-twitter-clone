@@ -25,6 +25,7 @@ export default function InteractButton({
       </section>
       <style jsx>{`
         section {
+          cursor: pointer;
           color: ${color};
           position: relative;
           display: flex;
