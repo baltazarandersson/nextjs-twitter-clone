@@ -1,4 +1,4 @@
-import { addCommentToDevit } from "@firebase/client"
+import { addReplyToDevit } from "@firebase/client"
 import ReactDOM from "react-dom"
 
 import { useUser } from "@context/UserContext"
@@ -11,7 +11,7 @@ function Reply({ devit, hiddeModal }) {
   const user = useUser()
 
   const handleSumbit = async (content, imgURL) => {
-    addCommentToDevit(
+    addReplyToDevit(
       {
         avatar: user.avatar,
         content,

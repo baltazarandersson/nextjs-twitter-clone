@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { addCommentToDevit, listenLatestDevitComments } from "@firebase/client"
+import { addReplyToDevit, listenLatestDevitComments } from "@firebase/client"
 
 import { useUser } from "@context/UserContext"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
@@ -65,7 +65,7 @@ export default function DevitPage({
   }, [])
 
   const handleSumbit = async (content, imgURL) => {
-    return addCommentToDevit(
+    return addReplyToDevit(
       {
         avatar: user.avatar,
         content,

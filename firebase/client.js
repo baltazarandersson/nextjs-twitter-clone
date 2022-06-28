@@ -120,19 +120,21 @@ export const loginWithGithub = () => {
   })
 }
 
-export const addCommentToDevit = async (commentData, devitId) => {
-  updateDoc(doc(database, "devits", `${devitId}`), {
-    commentsCount: increment(1),
-  })
-  const commentCollectionRef = collection(
+export const addReplyToDevit = async (replyData, devitId) => {
+  const devitRef = doc(database, "devits", `${devitId}`)
+  const devitRepliesCollectionRef = collection(
     database,
     "devits",
     `${devitId}`,
-    "comments"
+    "replies"
   )
 
-  return addDoc(commentCollectionRef, {
-    ...commentData,
+  updateDoc(doc(database, devitRef), {
+    repliesCount: increment(1),
+  })
+
+  return addDoc(devitRepliesCollectionRef, {
+    ...replyData,
     createdAt: Timestamp.fromDate(new Date()),
     likedBy: [],
   })
@@ -147,7 +149,10 @@ export const addDevit = async ({
   img,
 }) => {
   try {
-    const devitRef = await addDoc(collection(database, "devits"), {
+    const devitsCollectionRef = collection(database, "devits")
+    const userRef = doc(database, "users", `${userUid}`)
+
+    const newDevitRef = await addDoc(devitsCollectionRef, {
       avatar,
       content,
       userUid,
@@ -155,13 +160,13 @@ export const addDevit = async ({
       userName,
       createdAt: Timestamp.fromDate(new Date()),
       likedBy: [],
-      commentsCount: 0,
+      repliesCount: 0,
       shares: [],
       img,
     })
-    const devitId = devitRef.id
+    const devitId = newDevitRef.id
 
-    return updateDoc(doc(database, "users", `${userUid}`), {
+    return updateDoc(userRef, {
       devits: arrayUnion(devitId),
     })
   } catch (error) {
