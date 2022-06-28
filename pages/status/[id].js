@@ -7,9 +7,9 @@ import AppLayout from "@components/Layout/AppLayout"
 import Header from "@components/Layout/AppLayout/Header"
 import TextComposer from "@components/TextComposer"
 import TextSeparator from "@components/TextSeparator"
+import { useUser } from "@context/UserContext"
 import { addCommentToDevit, listenLatestDevitComments } from "@firebase/client"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
-import useUser from "@hooks/useUser"
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import Head from "next/head"
@@ -146,7 +146,7 @@ export default function DevitPage({
                 shares={shares}
                 id={id}
                 userUid={userUid}
-                size={26}
+                size={22}
                 justify={"space-around"}
               />
             </section>
@@ -189,7 +189,7 @@ export default function DevitPage({
         }
         .devit-info-container {
           color: ${colors.gray};
-          padding: 16px 0px;
+          margin: 16px 0px;
           display: flex;
           gap: 4px;
         }
@@ -200,6 +200,12 @@ export default function DevitPage({
         }
         .devit-content {
           word-break: break-word;
+        }
+        img {
+          margin-top: 12px;
+          width: 100%;
+          border-radius: 10px;
+          border: 1px solid ${colors.lightGray};
         }
         time {
           white-space: nowrap;

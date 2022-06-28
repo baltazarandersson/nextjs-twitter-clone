@@ -54,6 +54,9 @@ export default function InteractButton({
         }
         section > :global(svg) {
           color: ${color};
+          fill: ${color};
+          width: ${size}px;
+          height: ${size}px;
           display: block;
         }
         section > div:hover {
@@ -61,9 +64,11 @@ export default function InteractButton({
         }
         section:hover {
           color: ${hoverColor};
+          
         }
         section:hover :global(svg) {
           color: ${hoverColor};
+          fill: ${hoverColor};
         }
         section[disabled] > div:hover {
           background: none;

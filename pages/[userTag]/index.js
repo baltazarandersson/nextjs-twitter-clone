@@ -18,7 +18,7 @@ import BackButton from "@components/Buttons/BackButton"
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import Timeline from "@containers/Timeline"
-import useUser from "@hooks/useUser"
+import { useUser } from "@context/UserContext"
 
 export async function getServerSideProps(context) {
   const { query } = context

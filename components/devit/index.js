@@ -2,26 +2,26 @@ import Avatar from "@components/Avatar"
 
 import TextSeparator from "@components/TextSeparator"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
-import useTimeAgo from "@hooks/useTimeAgo"
-import { colors } from "@styles/theme"
-import { addOpacityToColor } from "@styles/utils"
-import Link from "next/link"
 import { useRouter } from "next/router"
+import Link from "next/link"
+import useTimeAgo from "@hooks/useTimeAgo"
 import DevitInteractions from "./DevitInteractions"
+import { colors } from "@styles/theme"
 
-export default function Devit({
-  id,
-  avatar,
-  displayName,
-  userName,
-  userUid,
-  likedBy,
-  commentsCount,
-  shares,
-  createdAt,
-  content,
-  img,
-}) {
+export default function Devit({ devit, showInteractions = true }) {
+  const {
+    id,
+    userUid,
+    avatar,
+    displayName,
+    userName,
+    createdAt,
+    content,
+    commentsCount,
+    shares,
+    likedBy,
+    img,
+  } = devit
   const timeAgo = useTimeAgo(createdAt)
   const createdAtFormated = useDateTimeFormat(createdAt)
   const router = useRouter()
@@ -72,15 +72,17 @@ export default function Devit({
             <p className="devit-content">{content}</p>
             {img && <img src={img} />}
             <div>
-              <section className="interactions-container">
-                <DevitInteractions
-                  likedBy={likedBy}
-                  commentsCount={commentsCount}
-                  shares={shares}
-                  id={id}
-                  userUid={userUid}
-                />
-              </section>
+              {showInteractions && (
+                <section className="interactions-container">
+                  <DevitInteractions
+                    likedBy={likedBy}
+                    commentsCount={commentsCount}
+                    shares={shares}
+                    id={id}
+                    userUid={userUid}
+                  />
+                </section>
+              )}
             </div>
           </div>
         </div>
@@ -92,6 +94,7 @@ export default function Devit({
           text-overflow: ellipsis;
         }
         article {
+          background: #fff;
           cursor: pointer;
           display: flex;
           align-items: stretch;
@@ -136,12 +139,13 @@ export default function Devit({
           width: 100%;
           border-radius: 10px;
           margin-bottom: 16px;
+          border: 1px solid ${colors.lightGray};
         }
         .timestamp:hover {
           text-decoration: underline;
         }
         article:hover {
-          background: ${addOpacityToColor(colors.dimmedGray, 0.8)};
+          background: ${colors.dimmedGray};
         }
         .user-name:hover {
           text-decoration: underline;

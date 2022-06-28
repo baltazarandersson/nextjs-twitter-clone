@@ -4,7 +4,6 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 
 import Logo from "@components/Icons/Logo"
-import useUser, { USER_STATES } from "@hooks/useUser"
 import { Loader } from "@components/Loader"
 import ActionButton from "@components/Buttons/ActionButton"
 import GitHub from "@components/Icons/GitHub"
@@ -13,6 +12,7 @@ import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 import useAlert, { ALERT_TYPES } from "@hooks/useAlert"
 import { AlertPortal } from "@components/Alert"
+import { USER_STATES, useUser } from "@context/UserContext"
 
 export default function HomePage() {
   const user = useUser()

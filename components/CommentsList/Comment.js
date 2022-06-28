@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Avatar from "@components/Avatar"
 import InteractButton from "@components/Buttons/InteractButton"
 import Like from "@components/Icons/Like"
@@ -6,9 +7,8 @@ import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import useTimeAgo from "@hooks/useTimeAgo"
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
-import Link from "next/link"
 
-export default function Comment({
+export default function reply({
   avatar,
   createdAt,
   displayName,
@@ -29,8 +29,8 @@ export default function Comment({
             </a>
           </Link>
         </div>
-        <div className="comment-container">
-          <div className="comment-info-container">
+        <div className="reply-container">
+          <div className="reply-info-container">
             <Link href={`/${userName}`}>
               <a className="text-ellipsis-container">
                 <span className="user-name">{displayName}</span>
@@ -49,8 +49,8 @@ export default function Comment({
               </time>
             </a>
           </div>
-          <div className="devit-content">
-            <p>{content}</p>
+          <div className="reply-content-container">
+            <p className="reply-content">{content}</p>
             {img && <img src={img} />}
             <section className="interactions-container">
               <InteractButton
@@ -82,22 +82,25 @@ export default function Comment({
         .avatar-container {
           padding-right: 10px;
         }
-        .comment-container {
+        .reply-container {
           display: flex;
           flex-direction: column;
           min-width: 0;
           flex: 1 1 auto;
         }
-        .comment-info-container {
+        .reply-info-container {
           display: flex;
         }
         .timestamp {
           color: ${colors.gray};
           font-size: 15px;
         }
-        .devit-content {
+        .reply-content-container {
           display: flex;
           flex-direction: column;
+        }
+        .reply-content {
+          word-break: break-word;
         }
         .interactions-container {
           margin-top: 12px;
@@ -120,9 +123,10 @@ export default function Comment({
           width: 100%;
           border-radius: 10px;
           margin-bottom: 16px;
+          border: 1px solid ${colors.lightGray};
         }
         article:hover {
-          background: ${addOpacityToColor(colors.dimmedGray, 0.8)};
+          background: ${colors.dimmedGray};
         }
         .user-name:hover {
           text-decoration: underline;

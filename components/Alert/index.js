@@ -3,7 +3,7 @@ import { addOpacityToColor } from "@styles/utils"
 import ReactDOM from "react-dom"
 
 export const TYPE_COLOR = {
-  0: colors.error,
+  0: colors.red,
   1: colors.warning,
   2: colors.primary,
 }
@@ -36,6 +36,7 @@ function Alert({ type, title, message, duration }) {
           animation: opacity ${durationInSeconds}s;
           color: ${colors.black};
           white-space: nowrap;
+          backdrop-filter: blur(22px);
         }
         .container {
           position: relative;

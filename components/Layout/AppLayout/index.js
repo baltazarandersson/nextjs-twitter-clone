@@ -3,7 +3,7 @@ import Create from "@components/Icons/Create"
 import Home from "@components/Icons/Home"
 import Star from "@components/Icons/Star"
 import User from "@components/Icons/User"
-import useUser from "@hooks/useUser"
+import { useUser } from "@context/UserContext"
 import { colors } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
 

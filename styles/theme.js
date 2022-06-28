@@ -12,10 +12,12 @@ export const colors = {
   secondary: "#1d9bf0",
   black: "#0F1419",
   gray: "#536471",
+  lightGray: "#cfd9de",
   dimmedGray: "#eff3f4",
   error: "#f91880",
   red: "#f4212e",
   warning: "#FFAD1F",
   green: "#00ba7c",
   skeleton: "#edecec",
+  fuxia: "#f91880",
 }

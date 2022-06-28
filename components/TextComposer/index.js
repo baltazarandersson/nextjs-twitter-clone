@@ -12,6 +12,7 @@ import useAlert, { ALERT_TYPES } from "@hooks/useAlert"
 
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
+import { useUser } from "@context/UserContext"
 
 const DRAG_IMAGES_STATES = {
   ERROR: -1,
@@ -29,7 +30,7 @@ const COMPOSE_STATES = {
 }
 
 export default function TextComposer({
-  user,
+  // user,
   onSumbit,
   placeholder,
   size = 120,
@@ -41,6 +42,8 @@ export default function TextComposer({
   const [imgURL, setImgURL] = useState(null)
   const [uploadProgress, setUploadProgress] = useState(0)
   const { shownAlert, createNewAlert } = useAlert()
+
+  const user = useUser()
 
   const contentValue = useMemo(() => {
     if (devitContent.length <= 280) {
@@ -117,7 +120,14 @@ export default function TextComposer({
   const handleFormSumbit = (event) => {
     event.preventDefault()
     setStatus(COMPOSE_STATES.LOADING)
-    onSumbit(devitContent, imgURL).then(() => setStatus(COMPOSE_STATES.SUCCESS))
+    const newDevitContent = devitContent
+    const devitImageUrl = imgURL
+    setImgURL(null)
+    setDevitContent("")
+    onSumbit(newDevitContent, devitImageUrl).then(() => {
+      setStatus(COMPOSE_STATES.SUCCESS)
+      setTask(null)
+    })
   }
 
   return (
@@ -183,7 +193,6 @@ export default function TextComposer({
         .compose-main-container {
           display: flex;
           align-items: start;
-          padding: 16px 0;
         }
         .avatar-container {
           flex: 0 0 auto;

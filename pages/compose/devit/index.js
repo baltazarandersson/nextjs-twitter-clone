@@ -48,6 +48,9 @@ const ComposeDevit = ({ user }) => {
       <style jsx>{`
         section {
           padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
         }
       `}</style>
     </>

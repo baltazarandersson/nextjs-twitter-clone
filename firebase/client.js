@@ -252,7 +252,13 @@ export const listenToDevitChanges = (devitId, callback) => {
   const devitDocRef = doc(database, "devits", `${devitId}`)
   const unsub = onSnapshot(devitDocRef, (devit) => {
     const data = devit.data()
-    callback(data)
+    const { createdAt } = data
+    const devitObj = {
+      ...data,
+      createdAt: fromTimeStampToDate(createdAt),
+      id: devitId,
+    }
+    callback(devitObj)
   })
   return unsub
 }
