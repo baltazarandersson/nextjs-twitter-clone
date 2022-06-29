@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import {
-  fetchLatestUserDevits,
   followUser,
+  listenLatestUserDevits,
   unfollowUser,
 } from "@firebase/client"
 
@@ -95,7 +95,8 @@ export default function UserProfile({
   })
 
   useEffect(() => {
-    fetchLatestUserDevits(uid).then(setUserTimeline)
+    const unsub = listenLatestUserDevits(uid, setUserTimeline)
+    return () => unsub()
   }, [])
 
   const handleClick = async (followedUserUid, followerUserUid) => {
@@ -180,7 +181,7 @@ export default function UserProfile({
             </div>
           </section>
           <section className="timeline-container">
-            <Timeline devitList={userTimeLine} />
+            <Timeline devitsList={userTimeLine} />
           </section>
         </section>
       </AppLayout>

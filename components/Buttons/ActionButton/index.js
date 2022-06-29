@@ -29,8 +29,8 @@ export default function ActionButton({
           font-size: 14px;
           font-weight: 700;
           padding: 8px 24px;
-          transition: opacity 0.3s ease;
-          transition: background 0.3s ease;
+          transition: opacity 0.3s ease, background 0.3s ease, border 0.3s ease,
+            color 0.3s ease;
           user-select: none;
         }
         button[styletype="fill"] {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { getFileURL, uploadImage } from "@firebase/client"
 
 import { useUser } from "@context/UserContext"
@@ -6,13 +6,14 @@ import { AlertPortal } from "@components/Alert"
 import Avatar from "@components/Avatar"
 import ActionButton from "@components/Buttons/ActionButton"
 import Cross from "@components/Icons/Cross"
-import Globe from "@components/Icons/Globe"
 import { Loader } from "@components/Loader"
 import StringCounter from "@components/StringCounter"
 import useAlert, { ALERT_TYPES } from "@hooks/useAlert"
 
 import { colors, fonts } from "@styles/theme"
 import { addOpacityToColor } from "@styles/utils"
+import InteractButton from "@components/Buttons/InteractButton"
+import Picture from "@components/Icons/Picture"
 
 const DRAG_IMAGES_STATES = {
   ERROR: -1,
@@ -29,12 +30,14 @@ const COMPOSE_STATES = {
   ERROR: 3,
 }
 
-export default function TextComposer({
-  // user,
-  onSumbit,
-  placeholder,
-  size = 120,
-}) {
+const supportedImageExtensions = [
+  "image/gif",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+]
+
+export default function TextComposer({ onSumbit, placeholder, size = 120 }) {
   const [devitContent, setDevitContent] = useState("")
   const [status, setStatus] = useState(COMPOSE_STATES.USER_NOT_KNOWN)
   const [drag, setDrag] = useState(DRAG_IMAGES_STATES.NONE)
@@ -43,6 +46,7 @@ export default function TextComposer({
   const [uploadProgress, setUploadProgress] = useState(0)
   const { shownAlert, createNewAlert } = useAlert()
 
+  const inputFileRef = useRef()
   const user = useUser()
 
   const contentValue = useMemo(() => {
@@ -104,7 +108,27 @@ export default function TextComposer({
     try {
       setDrag(DRAG_IMAGES_STATES.NONE)
       const file = e.dataTransfer.files[0]
+      if (!supportedImageExtensions.includes(file.type)) throw new Error()
+      const uploadTask = uploadImage(file)
+      setTask(uploadTask)
+    } catch (error) {
+      createNewAlert({
+        type: ALERT_TYPES.ERROR,
+        title: "Error",
+        message: "Invalid file format",
+      })
+      setStatus(COMPOSE_STATES.ERROR)
+    }
+  }
 
+  const handleClickFile = (e) => {
+    inputFileRef.current.click()
+  }
+
+  const handleSumbitFile = (e) => {
+    try {
+      const file = e.target.files[0]
+      if (!supportedImageExtensions.includes(file.type)) throw new Error()
       const uploadTask = uploadImage(file)
       setTask(uploadTask)
     } catch (error) {
@@ -171,13 +195,28 @@ export default function TextComposer({
             <div className="upload-progress-bar" />
           </div>
           <div className="sumbit-devit-container">
-            <div className="sumbit-devit-info">
-              <Globe height={16} width={16} />
-              <span>Everyone can reply</span>
+            <input
+              type="file"
+              ref={inputFileRef}
+              onChange={handleSumbitFile}
+              style={{ display: "none" }}
+            />
+            <div onClick={handleClickFile}>
+              <InteractButton
+                size={20}
+                color={colors.primary}
+                title="Upload Picture"
+              >
+                <Picture width={20} height={20} />
+              </InteractButton>
             </div>
             <div className="sumbit-button-container">
               <StringCounter characters={devitContent.length} />
-              <ActionButton disabled={isButtonDisabled} type="sumbit">
+              <ActionButton
+                disabled={isButtonDisabled}
+                type="sumbit"
+                color={colors.primary}
+              >
                 {status === COMPOSE_STATES.LOADING ? (
                   <Loader color={colors.dimmedGray} size={16} border={3} />
                 ) : (
@@ -245,32 +284,6 @@ export default function TextComposer({
           display: flex;
           align-items: center;
           justify-content: space-between;
-        }
-        .sumbit-devit-info {
-          cursor: pointer;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          padding: 2px 12px;
-          border-radius: 9999px;
-          color: ${addOpacityToColor(colors.primary, 0.9)};
-          transition: background 0.2s ease-in-out;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-        .sumbit-devit-info:hover {
-          background: ${addOpacityToColor(colors.primary, 0.1)};
-        }
-        .sumbit-devit-info > span {
-          font-size: 13px;
-          margin-left: 8px;
-          font-weight: 700;
-          vertical-align: middle;
-          display: inline-block;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
         }
         .sumbit-button-container {
           display: flex;

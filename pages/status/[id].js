@@ -1,7 +1,11 @@
 import Head from "next/head"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { addReplyToDevit, listenLatestDevitReplies } from "@firebase/client"
+import {
+  addReplyToDevit,
+  listenLatestDevitReplies,
+  listenToDevitChanges,
+} from "@firebase/client"
 
 import { useUser } from "@context/UserContext"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
@@ -25,7 +29,11 @@ export async function getServerSideProps(context) {
   const apiResponse = await fetch(`http://localhost:3000/api/devit/${id}`)
   if (apiResponse.ok) {
     const props = await apiResponse.json()
-    return { props }
+    return {
+      props: {
+        devit: props,
+      },
+    }
   } else {
     return {
       redirect: {
@@ -36,19 +44,8 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default function DevitPage({
-  id,
-  displayName,
-  userName,
-  avatar,
-  content,
-  userUid,
-  likedBy,
-  repliesCount,
-  shares,
-  createdAt,
-  img,
-}) {
+export default function DevitPage({ devit }) {
+  const { id, displayName, userName, avatar, content, createdAt, img } = devit
   const createdAtFormated = useDateTimeFormat(createdAt, "en-EN", {
     hour: "numeric",
     minute: "numeric",
@@ -57,10 +54,16 @@ export default function DevitPage({
     year: "numeric",
   })
   const [devitReplies, setDevitReplies] = useState([])
+  const [newDevitInteractions, setNewInteractions] = useState()
   const user = useUser()
 
   useEffect(() => {
     const unsub = listenLatestDevitReplies(id, setDevitReplies)
+    return () => unsub()
+  }, [])
+
+  useEffect(() => {
+    const unsub = listenToDevitChanges(id, setNewInteractions)
     return () => unsub()
   }, [])
 
@@ -143,13 +146,10 @@ export default function DevitPage({
           <>
             <section className="interactions-container">
               <DevitInteractions
-                likedBy={likedBy}
-                repliesCount={repliesCount}
-                shares={shares}
-                id={id}
-                userUid={userUid}
                 size={22}
                 justify={"space-around"}
+                devit={newDevitInteractions}
+                id={id}
               />
             </section>
             <section className="form-section-container">

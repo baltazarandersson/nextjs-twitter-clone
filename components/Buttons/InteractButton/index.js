@@ -49,11 +49,11 @@ export default function InteractButton({
           bottom: 0;
           left: 0;
           right: 0;
-          margin: -8px;
+          margin: -${size / 3}px;
           border-radius: 9999px;
           transition: background 0.2s ease;
         }
-        section > :global(svg) {
+        section :global(svg) {
           color: ${color};
           fill: ${color};
           width: ${size}px;

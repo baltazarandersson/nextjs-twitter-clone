@@ -8,28 +8,38 @@ import useTimeAgo from "@hooks/useTimeAgo"
 import DevitInteractions from "./DevitInteractions"
 
 import { colors } from "@styles/theme"
+import DevitOptions from "./DevitOptions"
+import { useMemo } from "react"
+import { useUser } from "@context/UserContext"
 
-export default function Devit({ devit, showInteractions = true }) {
+export default function Devit({
+  devit,
+  showInteractions = true,
+  showOptions = true,
+}) {
   const {
     id,
     avatar,
+    content,
+    createdAt,
     displayName,
     userName,
-    createdAt,
-    content,
-    repliesCount,
-    shares,
-    likedBy,
+    userUid,
     img,
   } = devit
   const timeAgo = useTimeAgo(createdAt)
   const createdAtFormated = useDateTimeFormat(createdAt)
   const router = useRouter()
+  const user = useUser()
 
   const handleArticleClick = (e) => {
     e.preventDefault()
     router.push(`/status/${id}`)
   }
+
+  const isDevitMadeByCurrentUser = useMemo(() => {
+    return userUid === user.uid
+  }, [])
 
   return (
     <>
@@ -42,31 +52,41 @@ export default function Devit({ devit, showInteractions = true }) {
           </Link>
         </div>
         <div className="devit-container">
-          <div className="devit-info-container">
-            <Link href={`/${userName}`}>
-              <a
+          <div className="devit-headers-container">
+            <div className="devit-info-container">
+              <Link href={`/${userName}`}>
+                <a
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-ellipsis-container"
+                >
+                  <span className="user-name">{displayName}</span>
+                </a>
+              </Link>
+              <Link href={`/${userName}`}>
+                <a
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-ellipsis-container"
+                >
+                  <span className="user-tag">@{userName}</span>
+                </a>
+              </Link>
+              <TextSeparator />
+              <Link href={`/status/${id}`}>
+                <a className="text-ellipsis-container">
+                  <time className="timestamp" title={createdAtFormated}>
+                    {timeAgo}
+                  </time>
+                </a>
+              </Link>
+            </div>
+            {showOptions && isDevitMadeByCurrentUser && (
+              <div
+                className="devit-options"
                 onClick={(e) => e.stopPropagation()}
-                className="text-ellipsis-container"
               >
-                <span className="user-name">{displayName}</span>
-              </a>
-            </Link>
-            <Link href={`/${userName}`}>
-              <a
-                onClick={(e) => e.stopPropagation()}
-                className="text-ellipsis-container"
-              >
-                <span className="user-tag">@{userName}</span>
-              </a>
-            </Link>
-            <TextSeparator />
-            <Link href={`/status/${id}`}>
-              <a className="text-ellipsis-container">
-                <time className="timestamp" title={createdAtFormated}>
-                  {timeAgo}
-                </time>
-              </a>
-            </Link>
+                <DevitOptions devitId={id} />
+              </div>
+            )}
           </div>
           <div className="devit-content-container">
             <p className="devit-content">{content}</p>
@@ -74,12 +94,7 @@ export default function Devit({ devit, showInteractions = true }) {
             <div>
               {showInteractions && (
                 <section className="interactions-container">
-                  <DevitInteractions
-                    likedBy={likedBy}
-                    repliesCount={repliesCount}
-                    shares={shares}
-                    id={id}
-                  />
+                  <DevitInteractions id={id} devit={devit} />
                 </section>
               )}
             </div>
@@ -93,6 +108,7 @@ export default function Devit({ devit, showInteractions = true }) {
           text-overflow: ellipsis;
         }
         article {
+          position: relative;
           background: #fff;
           cursor: pointer;
           display: flex;
@@ -100,7 +116,6 @@ export default function Devit({ devit, showInteractions = true }) {
           padding: 10px 15px;
           border-bottom: 1px solid ${colors.dimmedGray};
           transition: background 0.2s ease-in-out;
-          overflow: hidden;
         }
         .avatar-container {
           padding-right: 10px;
@@ -111,8 +126,19 @@ export default function Devit({ devit, showInteractions = true }) {
           min-width: 0;
           flex: 1 1 auto;
         }
-        .devit-info-container {
+        .devit-headers-container {
           display: flex;
+        }
+        .devit-info-container {
+          min-width: 0;
+
+          display: flex;
+        }
+        .devit-options {
+          min-width: 34px;
+          flex: 1 1 auto;
+          display: flex;
+          justify-content: flex-end;
         }
         .timestamp {
           color: ${colors.gray};

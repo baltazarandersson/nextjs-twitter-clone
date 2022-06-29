@@ -1,11 +1,11 @@
 import Devit from "@components/Devit"
 import DevitSkeleton from "@components/Devit/DevitSkeleton"
 
-export default function Timeline({ devitList }) {
+export default function Timeline({ devitsList }) {
   return (
     <>
-      {devitList ? (
-        devitList.map((devit) => {
+      {devitsList ? (
+        devitsList.map((devit) => {
           return <Devit key={devit.id} devit={devit} />
         })
       ) : (

@@ -124,7 +124,6 @@ export const loginWithGithub = () => {
     if (userInfo.isNewUser) {
       createNewUser(user)
     }
-    createNewUser(user)
     const data = mapUserFromFirebaseAuthToUser(user)
     return data
   })
@@ -172,7 +171,7 @@ export const addDevit = async ({
       likedBy: [],
       likesCount: 0,
       repliesCount: 0,
-      shares: [],
+      revits: [],
       img,
     })
     const devitId = newDevit.id
@@ -183,6 +182,20 @@ export const addDevit = async ({
   } catch (error) {
     console.error(error)
   }
+}
+
+export const deleteDevit = async (devitId, userUid) => {
+  const batch = writeBatch(database)
+
+  const devitToDelteRef = doc(database, "devits", `${devitId}`)
+  batch.delete(devitToDelteRef)
+
+  const userDevitsRef = doc(database, "users", `${userUid}`)
+  batch.update(userDevitsRef, {
+    devits: arrayRemove(devitId),
+  })
+
+  await batch.commit()
 }
 
 const mapDevtisFromFirebaseToDevitObject = (devitDoc) => {
@@ -213,10 +226,27 @@ export const listenLatestDevits = (callback) => {
     collection(database, "devits"),
     orderBy("createdAt", "desc")
   )
+
   const unsub = onSnapshot(devitsQuery, (snapshot) => {
     const data = snapshot.docs.map(mapDevtisFromFirebaseToDevitObject)
     callback(data)
   })
+
+  return unsub
+}
+
+export const listenLatestUserDevits = (userUid, callback) => {
+  const docsQuery = query(
+    collection(database, "devits"),
+    where("userUid", "==", userUid),
+    orderBy("createdAt", "desc")
+  )
+
+  const unsub = onSnapshot(docsQuery, (snapshot) => {
+    const data = snapshot.docs.map(mapDevtisFromFirebaseToDevitObject)
+    callback(data)
+  })
+
   return unsub
 }
 
@@ -234,6 +264,23 @@ export const fetchLatestUserDevits = async (userUid) => {
   } catch (error) {
     console.error(error)
   }
+}
+
+export const listenLatestFollowedUsersDevits = (followedUsers, onChange) => {
+  const docsQuery = query(
+    collection(database, "devits"),
+    where("userUid", "in", followedUsers),
+    orderBy("createdAt", "desc")
+  )
+
+  const unsub = onSnapshot(docsQuery, (querySnapshot) => {
+    const devitsList = querySnapshot.docs.map(
+      mapDevtisFromFirebaseToDevitObject
+    )
+    onChange(devitsList)
+  })
+
+  return unsub
 }
 
 export const uploadImage = (file) => {

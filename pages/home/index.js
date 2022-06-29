@@ -15,10 +15,10 @@ const HomePage = ({ user }) => {
 
   useEffect(() => {
     const unsub = listenLatestDevits((newDevits) => {
-      setTimeline(newDevits || [])
+      setTimeline(newDevits)
     })
     return () => unsub()
-  }, [user])
+  }, [])
 
   return (
     <>
@@ -38,7 +38,7 @@ const HomePage = ({ user }) => {
           <h1>Home</h1>
         </Header>
         <section>
-          <Timeline devitList={timeline} />
+          <Timeline devitsList={timeline} />
         </section>
       </AppLayout>
       <style jsx>{`

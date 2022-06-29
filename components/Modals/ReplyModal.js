@@ -6,6 +6,7 @@ import Devit from "@components/Devit"
 import TextComposer from "@components/TextComposer"
 
 import { colors } from "@styles/theme"
+import Head from "next/head"
 
 function Reply({ devit, hiddeModal }) {
   const user = useUser()
@@ -32,9 +33,12 @@ function Reply({ devit, hiddeModal }) {
 
   return (
     <>
+      <Head>
+        <title>Compose a new Devit / Devtter</title>
+      </Head>
       <div onClick={handleClick}>
         <section onClick={(e) => e.stopPropagation()}>
-          <Devit devit={devit} showInteractions={false} />
+          <Devit devit={devit} showInteractions={false} showOptions={false} />
           <section className="form-section-container">
             <TextComposer
               user={user}

@@ -51,7 +51,7 @@ export default function HomePage() {
             <div>
               <ActionButton
                 onClick={() => handleClick()}
-                styles={`font-weight: 500;  font-family: ${fonts.base};`}
+                styles={`fontWeight: 500;  font-family: ${fonts.base};`}
               >
                 <GitHub width={16} heigth={16} />
                 Sign in with GitHub
