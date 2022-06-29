@@ -135,7 +135,7 @@ export default function DevitInteractions({
                     </InteractButton>
                   </div>
                   <span className="share-link" ref={shareTextRef}>
-                    https://devter.vercel.app/status/{id}
+                    https://devtternext.vercel.app/status/{id}
                   </span>
                 </section>
                 <div className="click-detector" />
