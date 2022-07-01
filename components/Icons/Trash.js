@@ -3,24 +3,20 @@ import * as React from "react"
 function Trash(props) {
   return (
     <svg
-      height={21}
-      viewBox="0 0 21 21"
-      width={21}
-      xmlns="http://www.w3.org/2000/svg"
+      data-testid="geist-icon"
+      fill="none"
+      height={24}
+      shapeRendering="geometricPrecision"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      viewBox="0 0 24 24"
+      width={24}
+      color="var(--geist-foreground)"
       {...props}
     >
-      <g
-        fill="none"
-        fillRule="evenodd"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path
-          d="M2.5 2.5h10v12a2 2 0 01-2 2h-6a2 2 0 01-2-2zm5-2a2 2 0 011.995 1.85l.005.15h-4a2 2 0 012-2zM.5 2.5h14M5.5 5.5v8M9.5 5.5v8"
-          transform="translate(3 2)"
-        />
-      </g>
+      <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6" />
     </svg>
   )
 }

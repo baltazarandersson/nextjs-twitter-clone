@@ -28,7 +28,7 @@ export default function DevitOptions({ devitId }) {
           <>
             <section onClick={() => handleDelete()}>
               <div className="icon-container">
-                <Trash color={colors.red} />
+                <Trash color={colors.red} width={18} height={18} />
               </div>
               Delete
             </section>
@@ -76,6 +76,7 @@ export default function DevitOptions({ devitId }) {
         }
         .icon-container {
           margin-right: 12px;
+          height: 18px;
         }
         section:hover {
           background: ${colors.dimmedGray};
