@@ -2,7 +2,7 @@
 
 ### Project made within the [Next.js course of @midudev](https://github.com/midudev/curso-nextjs-twitter-clone)
 
-### Devtter is a small Twitter clone, It's designed as a Mobile-only app, you can post what you want, add images, delete your own posts, like another people posts, comment on them, follow people or simply visit their profiles
+### Devtter is a small, functional Twitter clone. It's designed as a Mobile-only app, you can post what you want, add images, delete your own posts, like another people posts, comment on them, follow people or simply visit their profiles
 
 #### This project is made only with Next.js, Styled JSX and Firebase
 
