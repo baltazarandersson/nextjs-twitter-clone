@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
   const { query } = context
   const { id } = query
 
-  const apiResponse = await fetch(`http://localhost:3000/api/devit/${id}`)
+  const apiResponse = await fetch(`${process.env.API_BASE_URL}/devit/${id}`)
   if (apiResponse.ok) {
     const props = await apiResponse.json()
     return {

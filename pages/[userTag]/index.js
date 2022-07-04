@@ -24,7 +24,9 @@ export async function getServerSideProps(context) {
   const { query } = context
   const { userTag } = query
 
-  const apiResponse = await fetch(`http://localhost:3000/api/users/${userTag}`)
+  const apiResponse = await fetch(
+    `${process.env.API_BASE_URL}/users/${userTag}`
+  )
   if (apiResponse.ok) {
     const props = await apiResponse.json()
     return { props }

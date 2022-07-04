@@ -183,7 +183,9 @@ export default function DevitInteractions({
           display: flex;
           align-items: center;
           width: max-content;
-          max-width: 350px;
+          width: 35vw;
+          max-width: 480px;
+          min-width: 350px;
           top: 0px;
           right: 0px;
           z-index: 3;
