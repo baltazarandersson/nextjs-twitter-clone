@@ -6,6 +6,8 @@
 
 #### This project is made only with Next.js, Styled JSX and Firebase
 
+## [app deploy](https://devtter-next.vercel.app/)
+
 ### Running app preview:
 
 ![home](https://user-images.githubusercontent.com/21319545/176981321-1734e9a1-2893-44d4-8570-b9495b45eb3c.png)
