@@ -135,7 +135,7 @@ export default function DevitInteractions({
                     </InteractButton>
                   </div>
                   <span className="share-link" ref={shareTextRef}>
-                    https://devtternext.vercel.app/status/{id}
+                    https://devtter-next.vercel.app/status/{id}
                   </span>
                 </section>
                 <div className="click-detector" />
@@ -202,9 +202,6 @@ export default function DevitInteractions({
         }
         .icon-container {
           margin-right: 12px;
-        }
-        section:hover {
-          background: ${colors.dimmedGray};
         }
         @keyframes expand {
           0% {
