@@ -1,14 +1,11 @@
 import Link from "next/link"
 
 import Avatar from "@components/Avatar"
-import InteractButton from "@components/Buttons/InteractButton"
-import Like from "@components/Icons/Like"
 import TextSeparator from "@components/TextSeparator"
 import useDateTimeFormat from "@hooks/useDateTimeFormat"
 import useTimeAgo from "@hooks/useTimeAgo"
 
 import { colors } from "@styles/theme"
-import { addOpacityToColor } from "@styles/utils"
 
 export default function Reply({ replyContent }) {
   const { avatar, createdAt, displayName, userName, content, img } =
