@@ -145,7 +145,7 @@ export default function UserProfile({
               >
                 <ActionButton
                   disabled={isButtonDisabled}
-                  onClick={() => handleClick(uid, user.uid)}
+                  onClick={() => handleClick(uid, user?.uid)}
                   styletype={
                     followingState === FOLLOWING_STATES.FOLLOWING
                       ? "outline"

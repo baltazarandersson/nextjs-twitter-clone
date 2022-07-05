@@ -28,7 +28,7 @@ export default function DevitInteractions({
   const shareTextRef = useRef()
 
   const isDevitLikedByUser = useMemo(() => {
-    return user.devitsLiked.includes(id)
+    return user?.devitsLiked.includes(id)
   }, [user])
 
   const handleToggleLike = () => {

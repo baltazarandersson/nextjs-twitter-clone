@@ -38,7 +38,7 @@ export default function Devit({
   }
 
   const isDevitMadeByCurrentUser = useMemo(() => {
-    return userUid === user.uid
+    return userUid === user?.uid
   }, [])
 
   return (
