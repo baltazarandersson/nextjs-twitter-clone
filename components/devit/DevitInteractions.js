@@ -13,6 +13,7 @@ import AddClipboard from "@components/Icons/AddClipboard"
 
 import { addOpacityToColor } from "@styles/utils"
 import { colors } from "@styles/theme"
+import { useRouter } from "next/router"
 
 export default function DevitInteractions({
   id,
@@ -24,28 +25,45 @@ export default function DevitInteractions({
   const [showLikeAnimation, toggleLikeAnimation] = useState(false)
   const [showShareOptions, setShareOptions] = useState()
 
+  const router = useRouter()
   const user = useUser()
   const shareTextRef = useRef()
 
+  const isUserLogged = useMemo(() => {
+    return !!user
+  }, [user])
+
   const isDevitLikedByUser = useMemo(() => {
-    return user?.devitsLiked.includes(id)
+    if (isUserLogged) {
+      return user.devitsLiked.includes(id)
+    } else {
+      return false
+    }
   }, [user])
 
   const handleToggleLike = () => {
-    if (isDevitLikedByUser) {
-      unlikeDevit(id, user.uid)
+    if (isUserLogged) {
+      if (isDevitLikedByUser) {
+        unlikeDevit(id, user.uid)
+      } else {
+        toggleLikeAnimation(true)
+        likeDevit(id, user.uid).then(() => {
+          setTimeout(() => {
+            toggleLikeAnimation(false)
+          }, 600)
+        })
+      }
     } else {
-      toggleLikeAnimation(true)
-      likeDevit(id, user.uid).then(() => {
-        setTimeout(() => {
-          toggleLikeAnimation(false)
-        }, 600)
-      })
+      router.push("/")
     }
   }
 
   const handleReply = () => {
-    setReplyModal(true)
+    if (isUserLogged) {
+      setReplyModal(true)
+    } else {
+      router.push("/")
+    }
   }
 
   const hiddeReplyModal = () => {
