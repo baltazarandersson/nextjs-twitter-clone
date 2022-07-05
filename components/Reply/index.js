@@ -49,16 +49,6 @@ export default function Reply({ replyContent }) {
           <div className="reply-content-container">
             <p className="reply-content">{content}</p>
             {img && <img src={img} />}
-            <section className="interactions-container">
-              <InteractButton
-                size={18}
-                hoverColor={colors.red}
-                hoverBgColor={addOpacityToColor(colors.red, 0.1)}
-                title="Like"
-              >
-                <Like width={18} height={18} color={colors.gray} />
-              </InteractButton>
-            </section>
           </div>
         </div>
       </article>
