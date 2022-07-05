@@ -125,10 +125,10 @@ export default function DevitInteractions({
                     onClick={() => copyToClipboard(shareTextRef)}
                   >
                     <InteractButton
-                      color={colors.gray}
+                      color={colors.primary}
                       size={26}
-                      hoverColor={colors.gray}
-                      hoverBgColor={addOpacityToColor(colors.gray, 0.1)}
+                      hoverColor={colors.primary}
+                      hoverBgColor={addOpacityToColor(colors.primary, 0.1)}
                       title="Copy"
                     >
                       <AddClipboard width={26} height={26} />
@@ -197,7 +197,7 @@ export default function DevitInteractions({
           animation: expand 0.1s normal;
         }
         .share-link {
-          border: 1px solid ${colors.lightGray};
+          border: 1px solid ${addOpacityToColor(colors.primary, 0.3)};
           border-radius: 9999px;
           padding: 4px 12px;
           word-break: break-word;
