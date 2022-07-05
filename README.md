@@ -10,8 +10,9 @@
 
 ### Running app preview:
 
-![home](https://user-images.githubusercontent.com/21319545/176981321-1734e9a1-2893-44d4-8570-b9495b45eb3c.png)
-![reply](https://user-images.githubusercontent.com/21319545/176981328-26e65861-20fa-4276-afe3-4b8e4a62d965.png)
-![devit](https://user-images.githubusercontent.com/21319545/176981335-f9746446-6c58-4e97-9253-76f48fe92a05.png)
-![compose](https://user-images.githubusercontent.com/21319545/176981342-bf51abf6-bd52-446a-ad5c-210744fd7cd0.png)
-![profile](https://user-images.githubusercontent.com/21319545/176981352-7dbbfb41-8c6b-42e2-8e36-c178dc2948d5.png)
+![home](https://user-images.githubusercontent.com/21319545/177390829-537324ad-142e-4400-afa9-f7aafb936648.png)
+![compose2](https://user-images.githubusercontent.com/21319545/177390852-c2ae6928-2f68-4d6c-93a8-cc49ce5fc69f.png)
+![replymodal](https://user-images.githubusercontent.com/21319545/177390862-ac29b97d-066b-4169-9b46-d3e7c3a7e684.png)
+![devit](https://user-images.githubusercontent.com/21319545/177390919-1c47661e-c029-4867-8686-0bfc0e618efa.png)
+![profile](https://user-images.githubusercontent.com/21319545/177390870-e7f7149c-8202-4635-b548-088e6b706005.png)
+![compose](https://user-images.githubusercontent.com/21319545/177390856-b8a1f975-e79f-4ea5-9dc3-693539bd10fe.png)
